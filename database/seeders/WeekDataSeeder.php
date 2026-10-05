@@ -23,27 +23,35 @@ class WeekDataSeeder extends Seeder
 {
     public function run(): void
     {
-        $property = Property::where('code', 'BKDS')->first();
-        if (! $property) {
-            return;
+        // Seed each property's current week from its own extracted data file,
+        // so every property shows the right numbers.
+        foreach (['BKDS', 'BKDU', 'BKV'] as $code) {
+            $property = Property::where('code', $code)->first();
+            if (! $property) {
+                continue;
+            }
+
+            $week = $property->reportWeeks()
+                ->where('status', ReportStatus::InProgress->value)
+                ->latest('start_date')
+                ->first()
+                ?? $property->reportWeeks()->latest('start_date')->first();
+
+            if (! $week) {
+                continue;
+            }
+
+            $path = database_path('seeders/data/'.strtolower($code).'_week.json');
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $this->seedWeek($week, json_decode(file_get_contents($path), true));
         }
+    }
 
-        $week = $property->reportWeeks()
-            ->where('status', ReportStatus::InProgress->value)
-            ->latest('start_date')
-            ->first()
-            ?? $property->reportWeeks()->latest('start_date')->first();
-
-        if (! $week) {
-            return;
-        }
-
-        $path = database_path('seeders/data/bkds_week.json');
-        if (! is_file($path)) {
-            return;
-        }
-        $data = json_decode(file_get_contents($path), true);
-
+    private function seedWeek(ReportWeek $week, array $data): void
+    {
         // Clear any previous data for an idempotent seed.
         $week->monthlyStats()->delete();
         $week->segmentProductions()->delete();

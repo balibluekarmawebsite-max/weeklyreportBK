@@ -13,6 +13,14 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Switch the active property (top-bar switcher).
+    Route::post('switch-property', function (\Illuminate\Http\Request $request) {
+        $data = $request->validate(['property_id' => ['required', 'exists:properties,id']]);
+        \App\Support\Workspace::setProperty((int) $data['property_id']);
+
+        return back();
+    })->name('property.switch');
+
     // Weekly reports
     Route::get('reports', [ReportWeekController::class, 'index'])->name('reports.index');
     Route::post('reports', [ReportWeekController::class, 'store'])->name('reports.store');

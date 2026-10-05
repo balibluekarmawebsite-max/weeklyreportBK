@@ -35,4 +35,15 @@ class DashboardTest extends TestCase
         // The seeded BKDS week has data in every section, so progress is 11/11.
         $this->get(route('dashboard'))->assertSee('11/11');
     }
+
+    public function test_switching_property_changes_the_dashboard(): void
+    {
+        // Default property is BKDS.
+        $this->get(route('dashboard'))->assertSee('Blue Karma Dijiwa Seminyak');
+
+        $bkv = \App\Models\Property::where('code', 'BKV')->firstOrFail();
+        $this->post(route('property.switch'), ['property_id' => $bkv->id])->assertRedirect();
+
+        $this->get(route('dashboard'))->assertSee('Blue Karma Villas');
+    }
 }

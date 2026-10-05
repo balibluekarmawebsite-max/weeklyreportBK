@@ -17,11 +17,6 @@ class ReportWeekSeeder extends Seeder
 {
     public function run(): void
     {
-        $property = Property::where('code', 'BKDS')->first();
-        if (! $property) {
-            return;
-        }
-
         $owner = User::where('email', 'ota@bluekarmasecrets.com')->first();
 
         // Most recent completed Friday as the start of "this week".
@@ -33,22 +28,24 @@ class ReportWeekSeeder extends Seeder
             [$thisWeekStart->copy()->subWeeks(2), ReportStatus::Exported],
         ];
 
-        foreach ($samples as [$start, $status]) {
-            $end = $start->copy()->addDays(6);
+        foreach (Property::all() as $property) {
+            foreach ($samples as [$start, $status]) {
+                $end = $start->copy()->addDays(6);
 
-            ReportWeek::updateOrCreate(
-                ['property_id' => $property->id, 'start_date' => $start->toDateString()],
-                [
-                    'end_date' => $end->toDateString(),
-                    'year' => (int) $start->isoFormat('GGGG'),
-                    'week_number' => (int) $start->isoFormat('W'),
-                    'label' => $start->format('d M').' – '.$end->format('d M Y'),
-                    'status' => $status,
-                    'owner_id' => $owner?->id,
-                    'locked_at' => $status->isLocked() ? now() : null,
-                    'exported_at' => $status === ReportStatus::Exported ? now() : null,
-                ],
-            );
+                ReportWeek::updateOrCreate(
+                    ['property_id' => $property->id, 'start_date' => $start->toDateString()],
+                    [
+                        'end_date' => $end->toDateString(),
+                        'year' => (int) $start->isoFormat('GGGG'),
+                        'week_number' => (int) $start->isoFormat('W'),
+                        'label' => $start->format('d M').' – '.$end->format('d M Y'),
+                        'status' => $status,
+                        'owner_id' => $owner?->id,
+                        'locked_at' => $status->isLocked() ? now() : null,
+                        'exported_at' => $status === ReportStatus::Exported ? now() : null,
+                    ],
+                );
+            }
         }
     }
 }

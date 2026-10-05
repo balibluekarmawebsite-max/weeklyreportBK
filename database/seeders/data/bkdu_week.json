@@ -2,218 +2,218 @@
     "sectionB": [
         {
             "month": 1,
-            "rn_sold": 432,
-            "occ_actual": 0.7742,
-            "occ_budget": 0.8333,
-            "occ_ly": 0.8315,
-            "arr_actual": 1676853,
-            "arr_budget": 2261496,
-            "arr_ly": 2119971,
-            "rev_actual": 724400686,
-            "rev_budget": 1051595457,
-            "rev_ly": 983666566
+            "rn_sold": 491,
+            "occ_actual": 0.7919,
+            "occ_budget": 0.8935,
+            "occ_ly": 0.8871,
+            "arr_actual": 1424079,
+            "arr_budget": 2189007,
+            "arr_ly": 1989727,
+            "rev_actual": 699222808,
+            "rev_budget": 1212710102,
+            "rev_ly": 1094350093
         },
         {
             "month": 2,
-            "rn_sold": 374,
-            "occ_actual": 0.7421,
-            "occ_budget": 0.75,
-            "occ_ly": 0.6825,
-            "arr_actual": 1653639,
-            "arr_budget": 1949050,
-            "arr_ly": 1818645,
-            "rev_actual": 618461085,
-            "rev_budget": 736740808,
-            "rev_ly": 625613750
+            "rn_sold": 477,
+            "occ_actual": 0.8518,
+            "occ_budget": 0.9036,
+            "occ_ly": 0.9107,
+            "arr_actual": 1671037,
+            "arr_budget": 1881728,
+            "arr_ly": 1661860,
+            "rev_actual": 797084518,
+            "rev_budget": 952154526,
+            "rev_ly": 847548839
         },
         {
             "month": 3,
-            "rn_sold": 413,
-            "occ_actual": 0.7401,
-            "occ_budget": 0.7903,
-            "occ_ly": 0.7724,
-            "arr_actual": 1553060,
-            "arr_budget": 1961770,
-            "arr_ly": 1790646,
-            "rev_actual": 641413848,
-            "rev_budget": 865140521,
-            "rev_ly": 771768308
+            "rn_sold": 488,
+            "occ_actual": 0.7871,
+            "occ_budget": 0.9194,
+            "occ_ly": 0.8903,
+            "arr_actual": 1459604,
+            "arr_budget": 2231011,
+            "arr_ly": 2135520,
+            "rev_actual": 712286706,
+            "rev_budget": 1271676283,
+            "rev_ly": 1178806827
         },
         {
             "month": 4,
-            "rn_sold": 446,
-            "occ_actual": 0.8259,
-            "occ_budget": 0.8481,
-            "occ_ly": 0.8333,
-            "arr_actual": 1765011,
-            "arr_budget": 2194724,
-            "arr_ly": 2049421,
-            "rev_actual": 787195012,
-            "rev_budget": 1005183536,
-            "rev_ly": 922239259
+            "rn_sold": 538,
+            "occ_actual": 0.8967,
+            "occ_budget": 0.91,
+            "occ_ly": 0.9017,
+            "arr_actual": 2072037,
+            "arr_budget": 2324473,
+            "arr_ly": 2099011,
+            "rev_actual": 1114755862,
+            "rev_budget": 1269162264,
+            "rev_ly": 1135565120
         },
         {
             "month": 5,
-            "rn_sold": 493,
-            "occ_actual": 0.8835,
-            "occ_budget": 0.8674,
-            "occ_ly": 0.7975,
-            "arr_actual": 1657455,
-            "arr_budget": 1983311,
-            "arr_ly": 1877921,
-            "rev_actual": 817125148,
-            "rev_budget": 959922448,
-            "rev_ly": 835674764
+            "rn_sold": 559,
+            "occ_actual": 0.9016,
+            "occ_budget": 0.9258,
+            "occ_ly": 0.9419,
+            "arr_actual": 1769179,
+            "arr_budget": 2195900,
+            "arr_ly": 1953247,
+            "rev_actual": 988970792,
+            "rev_budget": 1260446625,
+            "rev_ly": 1140696086
         },
         {
             "month": 6,
-            "rn_sold": 454,
-            "occ_actual": 0.8407,
-            "occ_budget": 0.9019,
-            "occ_ly": 0.9,
-            "arr_actual": 1828245,
-            "arr_budget": 2237461,
-            "arr_ly": 2116261,
-            "rev_actual": 830023410,
-            "rev_budget": 1089643475,
-            "rev_ly": 1028502786
+            "rn_sold": 569,
+            "occ_actual": 0.9483,
+            "occ_budget": 0.9317,
+            "occ_ly": 0.9367,
+            "arr_actual": 1965464,
+            "arr_budget": 2105180,
+            "arr_ly": 1958519,
+            "rev_actual": 1118349197,
+            "rev_budget": 1176795455,
+            "rev_ly": 1100687848
         },
         {
             "month": 7,
-            "rn_sold": 485,
-            "occ_actual": 0.8692,
-            "occ_budget": 0.9176,
-            "occ_ly": 0.8638,
-            "arr_actual": 2294298,
-            "arr_budget": 2412777,
-            "arr_ly": 2323591,
-            "rev_actual": 1112734695,
-            "rev_budget": 1235342005,
-            "rev_ly": 1119970693
+            "rn_sold": 573,
+            "occ_actual": 0.9242,
+            "occ_budget": 0.9435,
+            "occ_ly": 0.9419,
+            "arr_actual": 2546037,
+            "arr_budget": 2756442,
+            "arr_ly": 2306030,
+            "rev_actual": 1458879046,
+            "rev_budget": 1612518367,
+            "rev_ly": 1346721518
         },
         {
             "month": 8,
-            "rn_sold": 515,
-            "occ_actual": 0.9229,
-            "occ_budget": 0.9319,
-            "occ_ly": 0.9283,
-            "arr_actual": 2185033,
-            "arr_budget": 2381276,
-            "arr_ly": 2262469,
-            "rev_actual": 1125291830,
-            "rev_budget": 1238263536,
-            "rev_ly": 1171958959
+            "rn_sold": 592,
+            "occ_actual": 0.9548,
+            "occ_budget": 0.9452,
+            "occ_ly": 0.9613,
+            "arr_actual": 2357389,
+            "arr_budget": 2642487,
+            "arr_ly": 2426776,
+            "rev_actual": 1395574178,
+            "rev_budget": 1548497206,
+            "rev_ly": 1446358615
         },
         {
             "month": 9,
-            "rn_sold": 467,
-            "occ_actual": 0.8648,
-            "occ_budget": 0.8852,
-            "occ_ly": 0.8537,
-            "arr_actual": 1894455,
-            "arr_budget": 2241403,
-            "arr_ly": 2118575,
-            "rev_actual": 884710320,
-            "rev_budget": 1071390613,
-            "rev_ly": 976663063
+            "rn_sold": 559,
+            "occ_actual": 0.9317,
+            "occ_budget": 0.9267,
+            "occ_ly": 0.9233,
+            "arr_actual": 2119475,
+            "arr_budget": 2309702,
+            "arr_ly": 2120765,
+            "rev_actual": 1184786555,
+            "rev_budget": 1284194264,
+            "rev_ly": 1174903940
         },
         {
             "month": 10,
-            "rn_sold": 410,
-            "occ_actual": 0.7348,
-            "occ_budget": 0.8889,
-            "occ_ly": 0.8925,
-            "arr_actual": 1879524,
-            "arr_budget": 2084749,
-            "arr_ly": 1959773,
-            "rev_actual": 770604955,
-            "rev_budget": 1034035426,
-            "rev_ly": 975967028
+            "rn_sold": 498,
+            "occ_actual": 0.8032,
+            "occ_budget": 0.9129,
+            "occ_ly": 0.9129,
+            "arr_actual": 1954816,
+            "arr_budget": 2123693,
+            "arr_ly": 1899801,
+            "rev_actual": 973498589,
+            "rev_budget": 1202010355,
+            "rev_ly": 1075287380
         },
         {
             "month": 11,
-            "rn_sold": 254,
-            "occ_actual": 0.4704,
-            "occ_budget": 0.8333,
-            "occ_ly": 0.7278,
-            "arr_actual": 1896333,
-            "arr_budget": 1844316,
-            "arr_ly": 1772100,
-            "rev_actual": 481668522,
-            "rev_budget": 829942088,
-            "rev_ly": 696435472
+            "rn_sold": 206,
+            "occ_actual": 0.3433,
+            "occ_budget": 0.8133,
+            "occ_ly": 0.7633,
+            "arr_actual": 2171105,
+            "arr_budget": 2042683,
+            "arr_ly": 1728749,
+            "rev_actual": 447247698,
+            "rev_budget": 996829447,
+            "rev_ly": 791766958
         },
         {
             "month": 12,
-            "rn_sold": 214,
-            "occ_actual": 0.3835,
-            "occ_budget": 0.8226,
-            "occ_ly": 0.7312,
-            "arr_actual": 2433054,
-            "arr_budget": 2181589,
-            "arr_ly": 1983661,
-            "rev_actual": 520673650,
-            "rev_budget": 1001349354,
-            "rev_ly": 809333558
+            "rn_sold": 66,
+            "occ_actual": 0.1065,
+            "occ_budget": 0.8032,
+            "occ_ly": 0.6645,
+            "arr_actual": 2253723,
+            "arr_budget": 2190833,
+            "arr_ly": 1809894,
+            "rev_actual": 148745724,
+            "rev_budget": 1091035022,
+            "rev_ly": 745676533
         }
     ],
     "sectionC": [
         {
             "label": "Booking.com",
-            "rn_sold": 50,
-            "gross_revenue": 156792402
+            "rn_sold": 27,
+            "gross_revenue": 68862922
         },
         {
-            "label": "Expedia",
-            "rn_sold": 34,
-            "gross_revenue": 115126741
+            "label": "EXPEDIA",
+            "rn_sold": 9,
+            "gross_revenue": 23384306
         },
         {
-            "label": "G2 Travel",
-            "rn_sold": 25,
-            "gross_revenue": 40184170
+            "label": "Website \/Alaric",
+            "rn_sold": 3,
+            "gross_revenue": 5430306
         },
         {
-            "label": "Direct",
-            "rn_sold": 8,
-            "gross_revenue": 21192295
+            "label": "Direct booking",
+            "rn_sold": 2,
+            "gross_revenue": 4291404
         },
         {
-            "label": "Alaric",
-            "rn_sold": 13,
-            "gross_revenue": 31277650
+            "label": "Group retreat",
+            "rn_sold": 35,
+            "gross_revenue": 105000000
         },
         {
-            "label": "Asian Trails",
-            "rn_sold": 8,
-            "gross_revenue": 34000000
+            "label": "PEGASUS TOUR",
+            "rn_sold": 7,
+            "gross_revenue": 16110000
         },
         {
-            "label": "FJT Travel",
-            "rn_sold": 4,
-            "gross_revenue": 11200000
+            "label": "SULAWESI ADVENTURES",
+            "rn_sold": 3,
+            "gross_revenue": 9900000
         }
     ],
     "sectionD": [
         {
+            "label": "End Year Escape",
+            "rn_sold": 3,
+            "gross_revenue": 5430306
+        },
+        {
+            "label": "Book Direct save more",
+            "rn_sold": 2,
+            "gross_revenue": 4291404
+        },
+        {
+            "label": "Group Retreat",
+            "rn_sold": 35,
+            "gross_revenue": 105000000
+        },
+        {
             "label": "Bed and breakfast",
-            "rn_sold": 129,
-            "gross_revenue": 378495608
-        },
-        {
-            "label": "Stay Now Deal",
-            "rn_sold": 1,
-            "gross_revenue": 2403150
-        },
-        {
-            "label": "Book direct and save more",
-            "rn_sold": 8,
-            "gross_revenue": 15912000
-        },
-        {
-            "label": "Best Deal",
-            "rn_sold": 4,
-            "gross_revenue": 12962500
+            "rn_sold": 46,
+            "gross_revenue": 118257228
         }
     ],
     "channels": [
@@ -227,17 +227,17 @@
                 0,
                 0,
                 0,
-                33,
-                70,
-                230,
-                452,
-                242,
-                104
+                73,
+                120,
+                147,
+                402,
+                166,
+                128
             ]
         },
         {
             "year": 2021,
-            "source": "DOTW",
+            "source": "Hotelbed",
             "months": [
                 0,
                 0,
@@ -245,10 +245,10 @@
                 0,
                 0,
                 0,
+                2,
                 0,
-                0,
-                0,
-                0,
+                7,
+                20,
                 0,
                 0
             ]
@@ -264,11 +264,11 @@
                 0,
                 0,
                 0,
-                3,
+                0,
+                0,
                 11,
-                16,
-                17,
-                8
+                0,
+                0
             ]
         },
         {
@@ -282,70 +282,16 @@
                 0,
                 0,
                 0,
-                0,
-                0,
-                32,
-                4,
-                0
-            ]
-        },
-        {
-            "year": 2021,
-            "source": "Agoda",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                9,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2021,
-            "source": "Tiket.com",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
                 2,
-                3,
-                4,
-                2
-            ]
-        },
-        {
-            "year": 2021,
-            "source": "Hotelbeds",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                9,
-                2,
-                0,
-                23,
-                22,
+                18,
+                17,
+                20,
                 4
             ]
         },
         {
             "year": 2021,
-            "source": "Traveloka.com",
+            "source": "Agoda",
             "months": [
                 0,
                 0,
@@ -355,10 +301,46 @@
                 0,
                 0,
                 0,
+                0,
+                0,
+                0,
+                5
+            ]
+        },
+        {
+            "year": 2021,
+            "source": "Tiket.com",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                3,
+                0,
+                3,
+                3,
+                0
+            ]
+        },
+        {
+            "year": 2021,
+            "source": "Traveloka.com",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                5,
                 4,
-                21,
-                2,
-                2
+                32,
+                64,
+                16,
+                7
             ]
         },
         {
@@ -380,129 +362,93 @@
             ]
         },
         {
-            "year": 2021,
-            "source": "VRBO",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2021,
-            "source": "MG Holiday",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
             "year": 2022,
             "source": "Booking.com",
             "months": [
-                267,
-                245,
-                373,
-                418,
-                584,
-                604,
-                356,
-                365,
-                364,
-                327,
-                748,
-                518
+                200,
+                181,
+                316,
+                370,
+                523,
+                211,
+                196,
+                228,
+                203,
+                300,
+                252,
+                264
             ]
         },
         {
             "year": 2022,
-            "source": "DOTW",
+            "source": "Hotelbed",
             "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
+                22,
+                10,
+                19,
+                18,
+                23,
+                10,
+                34,
+                4,
+                8,
+                22,
+                15,
+                46
             ]
         },
         {
             "year": 2022,
             "source": "Expedia",
             "months": [
+                0,
                 1,
-                21,
-                19,
-                53,
-                22,
+                6,
+                8,
+                10,
+                3,
+                1,
+                6,
                 13,
-                4,
-                17,
-                17,
-                5,
-                4,
-                33
+                8,
+                10,
+                5
             ]
         },
         {
             "year": 2022,
             "source": "Website",
             "months": [
-                22,
                 1,
-                8,
                 26,
-                36,
-                36,
-                31,
-                15,
-                38,
+                13,
+                53,
+                103,
+                61,
                 54,
-                69,
-                20
+                43,
+                34,
+                79,
+                133,
+                49
             ]
         },
         {
             "year": 2022,
             "source": "Agoda",
             "months": [
-                11,
+                0,
+                0,
                 0,
                 0,
                 0,
                 0,
                 3,
-                12,
                 0,
+                2,
                 4,
-                1,
-                21,
-                13
+                2,
+                9
             ]
         },
         {
@@ -513,50 +459,32 @@
                 0,
                 0,
                 0,
-                0,
                 1,
                 0,
                 0,
-                2,
+                0,
+                0,
                 0,
                 0,
                 0
-            ]
-        },
-        {
-            "year": 2022,
-            "source": "Hotelbeds",
-            "months": [
-                39,
-                19,
-                31,
-                19,
-                4,
-                3,
-                20,
-                34,
-                25,
-                38,
-                59,
-                33
             ]
         },
         {
             "year": 2022,
             "source": "Traveloka.com",
             "months": [
-                5,
-                2,
-                0,
+                6,
+                14,
+                1,
+                3,
                 10,
                 2,
+                3,
                 1,
                 1,
                 0,
-                0,
-                0,
-                0,
-                0
+                2,
+                1
             ]
         },
         {
@@ -564,88 +492,52 @@
             "source": "Airbnb",
             "months": [
                 0,
-                7,
                 0,
                 0,
                 0,
                 0,
                 0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2022,
-            "source": "VRBO",
-            "months": [
-                0,
-                36,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2022,
-            "source": "MG Holiday",
-            "months": [
-                0,
-                0,
-                3,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
+                2,
+                8,
+                5,
+                12,
+                8,
+                9
             ]
         },
         {
             "year": 2023,
             "source": "Booking.com",
             "months": [
-                848,
-                534,
-                385,
-                268,
-                160,
-                198,
-                259,
-                250,
-                202,
-                360,
-                282,
-                285
+                607,
+                395,
+                228,
+                143,
+                164,
+                131,
+                177,
+                170,
+                142,
+                148,
+                346,
+                298
             ]
         },
         {
             "year": 2023,
-            "source": "Prestigia",
+            "source": "Hotelbed",
             "months": [
+                80,
+                15,
+                45,
                 0,
                 0,
-                0,
-                0,
+                10,
+                16,
+                46,
+                15,
+                27,
                 3,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
                 0
             ]
         },
@@ -653,31 +545,139 @@
             "year": 2023,
             "source": "Expedia",
             "months": [
-                127,
-                44,
-                34,
-                19,
-                4,
-                1,
+                47,
+                11,
+                22,
+                10,
+                11,
                 6,
-                14,
-                30,
-                27,
-                40,
-                48
+                8,
+                16,
+                6,
+                16,
+                23,
+                17
             ]
         },
         {
             "year": 2023,
             "source": "WEB-STAAH",
             "months": [
-                93,
-                40,
-                44,
-                21,
-                15,
-                22,
-                37,
+                161,
+                55,
+                65,
+                0,
+                32,
+                23,
+                13,
+                3,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2023,
+            "source": "Tiket.com",
+            "months": [
+                0,
+                5,
+                3,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2023,
+            "source": "Goibibo",
+            "months": [
+                3,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2023,
+            "source": "Traveloka.com",
+            "months": [
+                1,
+                0,
+                1,
+                1,
+                0,
+                0,
+                0,
+                2,
+                0,
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2023,
+            "source": "Airbnb",
+            "months": [
+                12,
+                1,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2023,
+            "source": "WEB-ROIBACK",
+            "months": [
+                4,
+                19,
+                25,
+                42,
+                5,
+                9,
+                17,
+                52,
+                4,
+                0,
+                7,
+                7
+            ]
+        },
+        {
+            "year": 2023,
+            "source": "Ctrip",
+            "months": [
+                0,
+                0,
+                1,
+                0,
+                3,
+                0,
+                0,
                 0,
                 0,
                 0,
@@ -689,76 +689,22 @@
             "year": 2023,
             "source": "Agoda",
             "months": [
-                4,
                 0,
                 0,
-                28,
-                8,
                 0,
+                24,
+                12,
                 0,
                 0,
                 1,
-                28,
-                58,
+                1,
+                23,
+                25,
                 27
             ]
         },
         {
             "year": 2023,
-            "source": "Tiket.com",
-            "months": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2023,
-            "source": "Hotelbeds",
-            "months": [
-                30,
-                41,
-                43,
-                18,
-                13,
-                7,
-                35,
-                39,
-                34,
-                54,
-                17,
-                0
-            ]
-        },
-        {
-            "year": 2023,
-            "source": "Traveloka",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2023,
             "source": "WEB-ALARIC",
             "months": [
                 0,
@@ -767,12 +713,12 @@
                 0,
                 0,
                 0,
-                0,
-                41,
-                109,
-                121,
-                106,
-                52
+                4,
+                71,
+                64,
+                116,
+                55,
+                83
             ]
         },
         {
@@ -781,29 +727,11 @@
             "months": [
                 0,
                 0,
+                3,
+                10,
+                1,
+                4,
                 0,
-                7,
-                0,
-                6,
-                0,
-                0,
-                0,
-                0,
-                17,
-                0
-            ]
-        },
-        {
-            "year": 2023,
-            "source": "WEB-ROIBACK",
-            "months": [
-                0,
-                30,
-                7,
-                11,
-                15,
-                5,
-                7,
                 0,
                 0,
                 0,
@@ -815,699 +743,861 @@
             "year": 2024,
             "source": "Booking.com",
             "months": [
-                507,
-                525,
-                358,
-                310,
-                265,
-                265,
-                314,
-                309,
-                266,
-                267,
-                337,
-                239
+                586,
+                397,
+                249,
+                289,
+                234,
+                227,
+                196,
+                193,
+                139,
+                150,
+                321,
+                269
             ]
         },
         {
             "year": 2024,
-            "source": "Klook",
+            "source": "Hotelbed",
             "months": [
-                0,
-                0,
-                0,
-                0,
-                7,
-                3,
+                2,
+                41,
+                18,
                 6,
+                4,
+                25,
+                39,
                 0,
-                9,
-                0,
-                14,
-                0
+                18,
+                11,
+                38,
+                15
             ]
         },
         {
             "year": 2024,
             "source": "Expedia",
             "months": [
-                89,
-                62,
-                28,
+                35,
+                34,
+                31,
+                18,
+                5,
+                11,
+                25,
+                24,
+                22,
+                7,
                 12,
-                41,
-                28,
-                49,
-                53,
+                35
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "KLOOK",
+            "months": [
+                0,
+                0,
+                3,
+                9,
+                14,
+                17,
+                4,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Tiket.com",
+            "months": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                1,
+                0,
+                2,
+                8,
+                3,
+                0,
+                1
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Goibibo",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Traveloka.com",
+            "months": [
+                1,
+                1,
+                0,
+                0,
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Airbnb",
+            "months": [
+                1,
+                3,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "WEB-ROIBACK",
+            "months": [
+                14,
+                3,
+                2,
+                0,
+                5,
+                9,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Ctrip",
+            "months": [
+                31,
+                8,
+                16,
+                8,
+                0,
+                0,
+                2,
+                0,
+                5,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Agoda",
+            "months": [
+                14,
+                9,
+                6,
+                1,
+                0,
+                4,
+                4,
+                3,
+                0,
+                4,
+                6,
+                2
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Hoterip",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                4,
+                0
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "WEB-ALARIC",
+            "months": [
+                61,
+                89,
+                94,
+                71,
+                55,
+                37,
+                48,
+                51,
+                78,
+                56,
+                78,
+                105
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "Dida Travel",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ]
+        },
+        {
+            "year": 2024,
+            "source": "MG Holiday",
+            "months": [
+                4,
+                6,
+                3,
+                6,
+                0,
+                0,
+                0,
+                3,
+                0,
+                8,
+                17,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Booking.com",
+            "months": [
+                477,
+                318,
+                242,
+                415,
+                336,
+                138,
+                108,
+                142,
+                106,
+                202,
+                242,
+                313
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Hotelbed",
+            "months": [
+                4,
+                0,
+                0,
+                0,
+                0,
+                0,
+                37,
+                9,
+                5,
+                15,
+                8,
+                13
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Expedia",
+            "months": [
+                27,
+                9,
+                25,
+                68,
+                51,
+                32,
                 47,
                 45,
-                162,
-                84
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "Ctrip",
-            "months": [
-                2,
-                2,
-                0,
-                3,
-                0,
-                0,
-                0,
-                6,
-                5,
-                13,
-                2,
-                2
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "Agoda",
-            "months": [
-                14,
-                2,
-                26,
-                9,
-                10,
-                3,
-                8,
-                0,
-                2,
-                0,
-                9,
-                2
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "Tiket.com",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "Hotelbeds",
-            "months": [
-                49,
-                33,
-                34,
-                20,
-                4,
-                7,
-                30,
-                23,
-                1,
-                26,
-                33,
-                53
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "Traveloka",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "WEB-ALARIC",
-            "months": [
-                48,
-                115,
-                140,
-                73,
-                59,
-                70,
-                29,
-                43,
-                64,
-                123,
-                77,
-                60
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "MG Holiday",
-            "months": [
-                0,
-                2,
-                3,
-                4,
-                0,
-                4,
-                5,
-                9,
-                5,
-                7,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "WEB-ROIBACK",
-            "months": [
-                4,
-                0,
-                3,
-                1,
-                0,
-                6,
-                8,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "Dida Travel",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                2
-            ]
-        },
-        {
-            "year": 2024,
-            "source": "G2 Travel",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                3,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Booking.com",
-            "months": [
-                395,
-                322,
-                398,
-                277,
-                224,
-                212,
-                212,
-                264,
-                201,
-                220,
-                292,
-                199
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Klook",
-            "months": [
-                0,
-                0,
-                13,
-                3,
-                5,
-                0,
-                7,
-                16,
-                10,
-                9,
-                20,
-                12
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Expedia",
-            "months": [
-                86,
-                69,
-                100,
-                84,
-                74,
-                29,
-                52,
-                58,
                 31,
-                27,
-                50,
-                34
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Ctrip",
-            "months": [
-                6,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                2
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Agoda",
-            "months": [
-                20,
-                0,
-                0,
-                0,
-                0,
-                0,
-                3,
-                4,
-                1,
-                0,
-                9,
-                6
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Tiket.com",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                2,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Hotelbeds",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                56,
-                8,
-                10,
-                45,
-                15,
-                0,
-                2
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Traveloka",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "WEB-ALARIC",
-            "months": [
-                46,
-                38,
-                49,
-                57,
-                65,
-                82,
-                93,
-                42,
-                32,
-                61,
-                83,
-                86
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "MG Holiday",
-            "months": [
-                5,
-                21,
-                4,
-                0,
-                0,
-                12,
-                3,
-                6,
-                2,
-                0,
-                24,
-                11
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Dida Travel",
-            "months": [
-                0,
-                0,
-                1,
-                0,
-                6,
-                0,
-                0,
-                0,
-                0,
-                4,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2025,
-            "source": "Bakuun (Luxury Escape)",
-            "months": [
-                43,
-                31,
-                33,
-                7,
-                7,
-                0,
-                5,
                 17,
-                3,
-                0,
-                5,
-                0
+                11,
+                63
             ]
         },
         {
             "year": 2025,
-            "source": "G2 Travel",
+            "source": "KLOOK",
             "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                43,
-                9,
-                22,
-                4,
-                0,
-                9
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Booking.com",
-            "months": [
-                442,
-                320,
-                285,
-                331,
-                346,
-                385,
-                321,
-                330,
-                185,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Klook",
-            "months": [
-                0,
-                2,
-                1,
-                6,
-                5,
-                0,
-                5,
-                1,
-                4,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Expedia",
-            "months": [
-                32,
-                21,
-                40,
-                58,
-                36,
-                43,
-                35,
-                46,
-                80,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Ctrip",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                8,
-                5,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Agoda",
-            "months": [
-                27,
-                19,
-                17,
-                0,
-                6,
-                16,
-                0,
-                0,
-                2,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Tiket.com",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                2,
-                1,
-                2,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Hotelbeds",
-            "months": [
-                0,
+                18,
                 0,
                 13,
                 4,
-                13,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "Tiket.com",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "WEB-ALARIC",
-            "months": [
-                182,
-                62,
-                79,
-                90,
-                56,
-                111,
-                83,
-                71,
-                50,
-                0,
-                0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "MG Holiday",
-            "months": [
-                13,
-                9,
-                17,
-                9,
-                19,
+                5,
+                1,
                 25,
-                19,
+                10,
                 8,
+                3,
+                4,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Tiket.com",
+            "months": [
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                2,
+                0,
+                0,
+                5,
+                1,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Goibibo",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Traveloka.com",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Tiket.com",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                4
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Ctrip",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Agoda",
+            "months": [
+                8,
+                11,
+                0,
+                0,
+                0,
+                0,
+                4,
+                5,
+                0,
+                13,
+                0,
+                4
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Hoterip",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "WEB-ALARIC",
+            "months": [
+                84,
+                52,
+                62,
+                97,
+                69,
+                75,
+                72,
+                44,
+                67,
+                57,
+                80,
+                66
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Dida Travel",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Bakuun (Luxury Escape",
+            "months": [
+                7,
+                15,
+                18,
+                0,
+                3,
+                0,
+                8,
+                5,
+                0,
+                6,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "G2 Travel",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                10,
+                6,
+                0,
+                5,
+                13
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "MG Holiday",
+            "months": [
+                15,
+                11,
+                4,
+                14,
+                3,
+                0,
+                0,
+                3,
+                0,
+                1,
+                4,
+                3
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "2",
+            "months": [
+                2026,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Booking.com",
+            "months": [
+                406,
+                404,
+                327,
+                215,
+                359,
+                221,
+                387,
+                234,
+                214,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Hotelbed",
+            "months": [
+                0,
+                0,
+                4,
+                7,
+                1,
+                1,
+                0,
                 4,
                 0,
                 0,
-                0
-            ]
-        },
-        {
-            "year": 2026,
-            "source": "HOTUSA (BEDS4 TRVAL)",
-            "months": [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
                 0,
                 0
             ]
         },
         {
-            "year": 2026,
-            "source": "Bakuun (Luxury Escape)",
+            "year": 2025,
+            "source": "Expedia",
             "months": [
                 20,
-                10,
-                13,
-                0,
+                8,
+                30,
                 22,
-                0,
-                2,
-                17,
-                14,
+                35,
+                31,
+                31,
+                15,
+                37,
                 0,
                 0,
                 0
             ]
         },
         {
-            "year": 2026,
-            "source": "G2 Travel",
+            "year": 2025,
+            "source": "KLOOK",
             "months": [
-                31,
-                0,
                 0,
                 0,
                 14,
-                45,
-                44,
-                93,
+                6,
+                3,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Tiket.com",
+            "months": [
+                5,
+                0,
+                0,
+                0,
+                4,
+                0,
+                11,
+                24,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Goibibo",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Traveloka.com",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Tiket.com",
+            "months": [
+                5,
+                7,
+                0,
+                5,
+                5,
+                0,
+                1,
+                25,
+                2,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Ctrip",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                3,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Agoda",
+            "months": [
+                13,
+                2,
+                0,
+                3,
+                6,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "VHSHUB",
+            "months": [
+                0,
+                0,
+                0,
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "WEB-ALARIC",
+            "months": [
+                88,
+                81,
+                102,
+                67,
+                68,
+                47,
+                70,
                 66,
+                60,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Hotusa WEBBED",
+            "months": [
+                0,
+                6,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "Bakuun (Luxury Escape",
+            "months": [
+                0,
+                0,
+                6,
+                5,
+                3,
+                0,
+                3,
+                4,
+                9,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "G2 Travel",
+            "months": [
+                25,
+                4,
+                35,
+                24,
+                10,
+                0,
+                7,
+                51,
+                7,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "year": 2025,
+            "source": "MG Holiday",
+            "months": [
+                5,
+                17,
+                0,
+                7,
+                9,
+                11,
+                10,
+                6,
+                4,
                 0,
                 0,
                 0
@@ -1516,91 +1606,91 @@
     ],
     "ownerRepeater": [
         {
+            "label": "Month",
+            "room_nights": null,
+            "revenue": null
+        },
+        {
             "label": "September 2025",
-            "room_nights": 60,
-            "revenue": 194229826
+            "room_nights": 76,
+            "revenue": 227808339
         },
         {
             "label": "October 2025",
-            "room_nights": 28,
-            "revenue": 67748189
+            "room_nights": 79,
+            "revenue": 202446643
         },
         {
             "label": "November 2025",
-            "room_nights": 27,
-            "revenue": 70953374
+            "room_nights": 84,
+            "revenue": 241383377
         },
         {
             "label": "December 2025",
-            "room_nights": 86,
-            "revenue": 233500040
+            "room_nights": 89,
+            "revenue": 239910924
         },
         {
             "label": "January 2026",
-            "room_nights": 69,
-            "revenue": 131746461
+            "room_nights": 60,
+            "revenue": 123041507
         },
         {
             "label": "46054",
-            "room_nights": 61,
-            "revenue": 154508945
+            "room_nights": 46,
+            "revenue": 92524673.55
         },
         {
             "label": "46082",
-            "room_nights": 79,
-            "revenue": 167570260
+            "room_nights": 92,
+            "revenue": 165768487.2
         },
         {
             "label": "46113",
-            "room_nights": 28,
-            "revenue": 65797235
+            "room_nights": 44,
+            "revenue": 127637429
         },
         {
-            "label": "46143",
-            "room_nights": 47,
-            "revenue": 96853924
+            "label": "46144",
+            "room_nights": 48,
+            "revenue": 120107227.2
         },
         {
-            "label": "46174",
-            "room_nights": 17,
-            "revenue": 34966393
+            "label": "46176",
+            "room_nights": 68,
+            "revenue": 192202287.6
         },
         {
             "label": "46204",
-            "room_nights": 40,
-            "revenue": 112649013
+            "room_nights": 26,
+            "revenue": 79488166.82
         },
         {
-            "label": "46235",
-            "room_nights": 66,
-            "revenue": 215744024
-        },
-        {
-            "label": "46266",
-            "room_nights": 22,
-            "revenue": 52593934
+            "label": "46236",
+            "room_nights": 52,
+            "revenue": 162106219.2
         }
     ],
     "ownerMix": [
         {
             "label": "OTA",
-            "rn_sold": 109,
-            "gross_revenue": 312103313
+            "rn_sold": 36,
+            "gross_revenue": 92247228
         },
         {
-            "label": "Direct Booking (Website\/Walk In\/Group Reatreat",
-            "rn_sold": 21,
-            "gross_revenue": 52469945
+            "label": "Direct Booking (Website\/Walk In\/Group Retreat",
+            "rn_sold": 40,
+            "gross_revenue": 114721710
         },
         {
             "label": "Offline Travel Agents",
-            "rn_sold": 12,
-            "gross_revenue": 45200000
+            "rn_sold": 10,
+            "gross_revenue": 26010000
         }
     ],
     "overview": {
-        "financial": "As of 1st October 2026, in terms of occupancy for Oct 2026, we are below 15.41% compared to Budget Oct 2026. Following our ADR in the month of Oct 2026, 9.84% below our Budget, and Revenue in the Month of Oct is 25.48% below our Budget.\nOur strategy remains driving occupancy in filling up Oct onwards with Last Minute Promotion through ads to boost our direct bookings and doing more Telemarketing. Joining the campaign with OTA to grab more last-minute bookings to maximize the Room Revenue with yield price to hit our ADR and Revenue Budget.",
-        "market": "Performance Summary \u2013 Blue Karma Dijiwa Seminyak\n\nReporting Period: Last 30 Days (as of 30 September 2026)\n\nBlue Karma Dijiwa Seminyak maintains strong ADR and excellent guest reviews. The main challenge is increasing booking volume and improving search-to-booking conversion.\n\n Scores\n\nProperty Page: 100% (vs. 100% area avg.)  \nGuest Review: 9.3 (vs. 8.7 area avg.)\n\n Performance Highlights\n\nRoom Nights\n\nAug 31 \u2013 Sep 6: 33 (+4.13% vs market)  \nSep 7 \u2013 Sep 13: 77 (+153.01%)  \nSep 14 \u2013 Sep 20: 63 (+99.24%)  \nSep 21 \u2013 Sep 27: 40 (+29.20%)  \nSep 28 \u2013 Sep 30: 24 (+46.98%)\n\n\u27a1\ufe0f Room nights remained above the market during these periods.\n\nRevenue\n\nAug 31 \u2013 Sep 6: IDR 109.56M (+50.03%)  \nSep 7 \u2013 Sep 13: IDR 242.37M (+261.22%)  \nSep 14 \u2013 Sep 20: IDR 193.58M (+183.72%)  \nSep 21 \u2013 Sep 27: IDR 156.73M (+127.50%)  \nSep 28 \u2013 Sep 30: IDR 67.44M (+81.18%)\n\n\u27a1\ufe0f Revenue continues to outperform the market on a weekly basis.\n\n Last 30 Days\n\nRevenue: IDR 584.55M \ud83d\udd3b -47.96% vs peer group  \nRoom Nights: 184 \ud83d\udd3b -56.82%  \nADR: IDR 3.18M \ud83d\udfe2 +20.52%\n\n\u27a1\ufe0f The main gap is booking volume, while pricing remains strong.\n\n Next 30 Days\n\nRevenue on Books: IDR 528.01M  \nRoom Nights: 159  \nADR: IDR 3.32M \ud83d\udfe2 +35.32%  \nCancellation: 51.67% \u26a0\ufe0f\n\n\u27a1\ufe0f Forward ADR is strong, but cancellations should be monitored.\n\n Demand & Search\n\nDemand: \ud83d\udd3b -7%  \nSearch Window: 91+ days  \nStay Length: 3\u20137 nights  \nTop Market: Australia (22.65%)\n\nCTR: 2.21% \ud83d\udd3b -33.41% vs peer group  \nBooking Conversion: 1.54% \ud83d\udd3b -34.53%\n\n\u27a1\ufe0f The key opportunity is improving property-page clicks and booking conversion.\n\n Source Markets \u2013 Last 90 Days\n\n265 booked rooms\n\nAustralia ~48% | USA ~6% | UK ~6% | Germany ~4% | Netherlands ~4% | Other ~32%\n\n Summary\n\nBlue Karma Dijiwa Seminyak has strong reviews and premium ADR. The main focus should be increasing booking volume, improving CTR and conversion, and reducing cancellations while maintaining strong pricing."
+        "financial": "As of 1st October 2026, in terms of occupancy in Oct 2026 we are 10.97% below compared to our Budget, and in terms of ADR in Oct we are 7.95% below compared to our Budget, and in terms of Revenue 19.01% below compared to our Budget in Oct 2026.\nOur strategy remains driving occupancy in filling up Oct onwards with Last Minute Promotion through ads to boost our direct booking and doing more Telemarketing and Join the campaign with OTA to grab more last minute bookings to maximize the Room Revenue and maintain the ADR.",
+        "market": "Market Overview"
     },
     "sales": [
         {
@@ -1626,7 +1716,7 @@
         {
             "date": "01 Oct 2026",
             "subject": "TELEMARKETING",
-            "notes": "Tari Bali Tour\nPIC :Bpk Erman Mulia\nMarket : China\nUpdate\n- Maintain relationship with patners\n-Mostly their guest is China market who stay in Ausie with high end market\n-This year still slow booking request after chinese new year\n-The length of stay for their guest maximum 5 nights\n-The destination for this year mostly request to stay in Nusa Dua,Kuta and Jimbaran\n- Invite the agent to do site inspection to our Properties\nAlfa Prima\nPIC :Bapak Hengky\nMarekt :Europe\nUpdate\n- Maintain relationship with patners\n-Their guest typical is FIT,Couple and family\n-This year still slow request they said the effect from the war issue\n-Mostly their guest request for stay in nusa dua area with length of stay start from 3 nights, also their guest looking for stay in Pemuteran and other area in Bali\n- Invite the agent to do site inspection to our Properties\nIndonesia Impression\nPIC : Arnold\nMarket : Italy, Spain\nUpdate :\nTheir main source markets remain Italy and Spain, with some additional demand from Mongolia, mainly targeting the Nusa Dua area.\nFor 2027, they are seeing stronger early pickup compared with 2026, particularly for April onwards, indicating improved forward demand for the next travel season.\nConducted a product familiarization session covering our room categories, facilities, restaurant concept, and sustainability initiatives to refresh their product knowledge.\nThey have already been supporting Blue Karma Ubud and Blue Karma Seminyak within their programs.\nTheir current Bali routing includes Ubud, Seminyak, Nusa Dua, Munduk, and Sanur, depending on the itinerary and market requirements.\nInvited them to visit Blue Karma Umalas to introduce the property and explore opportunities to include it in their future programs."
+            "notes": "Tari Bali Tour\nPIC :Bpk Erman Mulia\nMarket : China\nUpdate\n- Maintain relationship with patners\n-Mostly their guest is China market who stay in Ausie with high end market\n-This year still slow booking request after chinese new year\n-The length of stay for their guest maximum 5 nights\n-The destination for this year mostly request to stay in Nusa Dua,Kuta and Jimbaran\n- Invite the agent to do site inspection to our Properties\nAlfa Prima\nPIC :Bapak Hengky\nMarekt :Europe\nUpdate\n- Maintain relationship with patners\n-Their guest typical is FIT,Couple and family\n-This year still slow request they said the effect from the war issue\n-Mostly their guest request for stay in nusa dua area with length of stay start from 3 nights, also their guest looking for stay in Pemuteran and other area in Bali\n- Invite the agent to do site inspection to our Properties\nIndonesia Impression\nPIC : Arnold\nMarket : Italy, Spain\nUpdate :\nTheir main source markets remain Italy and Spain, with some additional demand from Mongolia, mainly targeting the Nusa Dua area.\nFor 2027, they are seeing stronger early pickup compared with 2026, particularly for April onwards, indicating improved forward demand for the next travel season.\nConducted a product familiarization session covering our room categories, facilities, restaurant concept, and sustainability initiatives to refresh their product knowledge.\nThey have already been supporting Blue Karma Ubud and Blue Karma Seminyak within their programs.\nTheir current Bali routing includes Ubud, Seminyak, Nusa Dua, Munduk, and Sanur, depending on the itinerary and market requirements.\nInvited them to visit Blue Karma Umalas to introduce the property and explore opportunities to include it in their future programs.\nRevive Restorative(Becca & Marisa)\nPeriod stay BKDU 10 - 17 Oct 2027\nOur repeater guest, they plan to hositng their retreat for 7 nights with total 15 - 17 rooms, the package already confirmed and sent the invoice with deposit requirment\nEmma Ferris\nInquiry for BKDU period 26 June - 3 Jul 2027\nThey have full inclusion package for 7 nights with total 9 rooms, the booking has been confirm based on new package with floating sound healing, still wait the deposit to secure her booking\nsecond group BKDU period 12 - 19 Jun\nShe also have inquiry for second group for 7 nights stay with same package as the first group, already hold the room and sent the confirmation with the invoice as well\nMr.Sasa\nperiod stay 16 - 19 Oct 2026\nThey had confirmed second group his year for 3 nights with total 10 rooms on period 16-19 Oct based on bed and breakfast, first deposit paid to secure the booking\nPeriod stay 23 - 26 may 2027\nconfirm booking for 12 rooms for 3 nights,invoice and confirmation sent .\nstill wait the first deposit to secure the room\nDivine Joy ( Christine Heart)\nInquiry for BKDU 8-14 Nov 2026\nThey are our repeater retreat organizer who just finised the retreat at our property on Nov and will polans to come again on Nov 2026 with inquiry to buy out all the room that we have. Already inform our availability and will inform the price early next year once we set the price for 2026. we already provide the package rate for Nov 2026 and they confirm to bosting their retreat on 8 - 14 Nov with totL 19 Rooms, already sent the confirmation and proforma invoice, second payment paid on 5 Aug\nBusiness women Australia(Lyn)\nInquiry for BKDU 10 - 14 Aug 2026\nThey had done the retreat at BKDU on Aug 2025 and interest to return back again next year on period Aug 2026 with total 14 rooms, already inform our availability and offer the package price for next year, she still review the package and will get back nnext week once she return back to Australia\nShahad\nInquiry BKDU period 27 Nov - 2 Dec\nrepeater guest inquiry to hiosting group retreat for 5 nights stay with total 10 rooms for period 27 Nov - 2 Dec.\nalready inform our availability and offer our package following her inquiry with 3 dinner during stay and also 3 times use of yoga shala per day. She confirm the booking with original package with 2 dinner and 1 spa, already sent the confirmation and proforma invoice. still wait first deposit tomsecure the booking\nEdith\nInquiry for BKDU on period 11 - 16 Oct 2026\nThey had decided to confirm their booking for 5 nights stay on period 11 - 16 Oct 2026 with totla 10 rooms, already send the confirmation and proforma invoice to process the first payment and secure the room. Fisrd deposit paid on 6th Aug 2025\nVillasResort.CZ (Eva Martinaskova)\nperiod stay BKDU 9 - 12 March 2027\nThey have inquiry for period 6 -11 March 2027 with total 6 rooms doublem occupancy, unfprtunatleyy we had hold other group from 6 - 10 March, we suggest them to move the date from 10 March and already offer the price as usual for repeater guest, still wait the feedback and final decision, confirmed the booking for period 9 - 12 March 2027, first deposit paid\nAlanna Wilson\nInquiry BKDU March 2027\nThey have inquiry for 7 nights stay from 24 - 31 March 2027, their retreat type is dance retreat with loud music. After discuss with Pak Asta we can consider to host their retreat as long they can follow our policy, morning session should be start around 10 AM and evening session should be finish at 7 PM. we ahd offer the package and wait their final decision. She confirm the booking start with 10 rooms, alrady sent confirmation and invoice as well\nOlga Keranchuk\nperios stay BKDU 1 - 11 Apr 2027\nThey had booked the room through booking.com to hold the space, she interest to book direct with our group retreat package include half day and our standard inclusion. She ask her friend to visit on 23 July and take some video for real time. Already send our package and wait her decision and cancel the holding room on b.com. confirm direct bookin with total 9 room, already sent the confirmation and invoice, the first deposit due date is on 5th Dec 2026\nSoul Bliss Journeys\nPeriod stay BKDU 1 - 6 June 2027\nThey inquiry for buy out the entire property as private stay and request to block the room and request the first deposit due date on early Feb 2027, special for this booking we are confirm their request for the payment term and already sent the confirmation and invoice with buy out term and condition\nJustine Reiss\nInquiry BKDU 31 Jul - 7 Aug 2027\nThey plan to hosting retreat with total particioant between 15 - 30 Persons for 7 nights stay. interesting with daily half board,yoga,spa and some excursion during their stay, they also will take retreat content during stay.\naleady inform our availability and offer the package as well, still wait her feedback, she decided to confirm the booking with total 15 rooms. Still wait the first deposit\nDenis Dochioiu-Andreea Karkhi\nPeriod stay BKDU 6 - 10 March 2027\nTheir original booking is on period 1 - 5 March 2026, 5 rooms cancel due to war and they decided to keep the deposit paid for next year stay with total 4 night and 6 rooms, for dinner they decided to take from our all day menu, will sent the menu at least 30 days prior arrive with new price\nBrenda S Powell\nInquiry BKDU period stay Nov 2027\nThey have inquiry to hosting groupm retreat on period early Nov 2027 with total participant approximately 14 - 20 persons\nalready inform our availability and offer early bird package as well, still wait their feedback and decision\nIara Snei\nPeriod stay BKDU 27 - 31 May 2027\nRepeater guest, they would like to stay with her group next year for 4 nights with 7 rooms at one ebdroom garden view. Request special rate same as this year but after conversation they confirm with price at IDR 2,9jt per room per night with additional inclusion for Iara and her assistant 60 minutes massage. confirm the booking and wait for deposit payment\nsecond group 24 - 18 Jun\nThey have second group with total 7 rooms for 4 nights, invoice sent and wait the first deposit. They request flexibility to reduce the total room on jan 2027 if any change for the total room\nDiana Ximena\nInquiry BKDU 11 - 18 July 2027\nshe have inquiry for buy out the whole property for 7 nights stay with possibility for us to open the restaurant and spa fro out side guest.\nalready inform our availability and offer the price as well. Still her feedback and decision\nMichelle\nInquiry BKDU for Feb 2027\nShe have inquiry for 6 nights stay on Feb but no specific date yet with all room based on single occupancy, the guest request group package with daily dinner,2 spa and also airport transfer service.\nalready infor our availability and offer the package as requested, confirm their booking with total 5 rooms on period 7 - 13 Feb, already block the room and sent confirmation with invoice\nBecca Eisenberg\nInquiry BKDU for period 13 - 19 July 2027\nshe have inquiry for hosting group retreat for 6 nights with total 13 rooms, they request 2 oprion package, sharing stay with iother individual guest and buy out the entire room based on private stay.\nalready provide offer both option as requested, she will get back after review the package\nNathan Polselli\nInquiry BKDU on Nov 2027\nAfter their stay at our property in our proeprty on Nov 2025, they decided to bring a group retreat on Nov 2027 but no specific date yet. Sill ask them to share their inquiry details to be able for us to prepare and provide the suitable package for their group.\nNina-David Wedding at BKDU\nConfirmed wedding on 7 July with period of stay 6 - 8 July 2027, total 8 rooms booking\ntotal wedding guest 15 pax for now and will update if any additional guest.\nfood testing for dinner eddinmg done on 18 July 2026, still wait their decision which menu will choice for the wedding dinner\nSebastian Pramono\nInquiry wedding on 21 Nov 2027, period stay 20 - 22 Nov\ninquiry to hosting wedding at our proeprty, request package option for buy out at BKDU and BKV with total 50 guest on wedding day\nalready provide our package price for each property and wait the feedback and decision"
         }
     ],
     "ecommerce": [
@@ -1684,28 +1774,28 @@
     "social": [
         {
             "metric": "website_visit",
-            "last_week": 48,
-            "this_week": 46
+            "last_week": 46,
+            "this_week": 41
         },
         {
             "metric": "profile_visit",
-            "last_week": 558,
-            "this_week": 556
+            "last_week": 487,
+            "this_week": 2093
         },
         {
             "metric": "account_reached",
-            "last_week": 43696,
-            "this_week": 66453
+            "last_week": 36936,
+            "this_week": 80566
         },
         {
             "metric": "impression",
-            "last_week": 67296,
-            "this_week": 40285
+            "last_week": 59396,
+            "this_week": 51576
         },
         {
             "metric": "followers",
-            "last_week": 13211,
-            "this_week": 13369
+            "last_week": 17538,
+            "this_week": 17687
         }
     ],
     "trainings": [
@@ -1902,7 +1992,7 @@
         }
     ],
     "warnings": [
-        "Section SM.2: skipped 17 empty\/error line(s).",
-        "Section SM.3: skipped 6 empty\/error line(s)."
+        "Section SM.2: skipped 31 empty\/error line(s).",
+        "Section SM.3: skipped 4 empty\/error line(s)."
     ]
 }

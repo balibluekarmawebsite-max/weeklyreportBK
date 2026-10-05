@@ -15,7 +15,7 @@ class ReportWeekController extends Controller
 {
     public function index(): View
     {
-        $property = Property::where('is_active', true)->orderBy('id')->first();
+        $property = \App\Support\Workspace::currentProperty();
 
         $weeks = ReportWeek::query()
             ->when($property, fn ($q) => $q->where('property_id', $property->id))

@@ -15,7 +15,7 @@ class SettingsController extends Controller
     public function index(): View
     {
         return view('settings.index', [
-            'property' => Property::where('is_active', true)->orderBy('id')->first(),
+            'property' => \App\Support\Workspace::currentProperty(),
             'channels' => Channel::orderBy('sort_order')->get(),
             'segments' => MarketSegment::orderBy('sort_order')->get(),
             'rateCodes' => RateCode::orderBy('sort_order')->get(),

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Support\Format;
 use App\Support\ReportCalculator;
-use App\Models\Property;
+use App\Support\Workspace;
 use Illuminate\Contracts\View\View;
 
 class DashboardController extends Controller
@@ -13,7 +13,7 @@ class DashboardController extends Controller
 
     public function index(): View
     {
-        $property = Property::where('is_active', true)->orderBy('id')->first();
+        $property = Workspace::currentProperty();
 
         $week = $property
             ? $property->reportWeeks()->latest('start_date')->first()

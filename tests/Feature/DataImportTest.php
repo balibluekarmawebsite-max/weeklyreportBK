@@ -35,7 +35,11 @@ class DataImportTest extends TestCase
         $book->removeSheetByIndex(0);
 
         $sm1 = $book->createSheet(); $sm1->setTitle('SM.1');
-        // Jan (row5), Feb (row6): C=rn, D/E/F=occ, G/H/I=arr, J/K/L=rev
+        // A "Month" header anchors the current YTD block; Jan (row5), Feb (row6).
+        $sm1->setCellValue('B4', 'Month');
+        $sm1->setCellValue('B5', 'January');
+        $sm1->setCellValue('B6', 'February');
+        // C=rn, D/E/F=occ, G/H/I=arr, J/K/L=rev
         $sm1->fromArray([50, 0.90, 0.92, 0.80, 2000000, 2100000, 1900000, 100000000, 110000000, 95000000], null, 'C5');
         $sm1->fromArray([48, 0.88, 0.90, 0.78, 1950000, 2050000, 1850000, 93600000, 98400000, 88800000], null, 'C6');
 
@@ -123,6 +127,33 @@ class DataImportTest extends TestCase
         $this->assertSame('28 Sep 2026', $data['trainings'][0]['date']);  // serial converted
         $this->assertCount(1, $data['actionPlan']);
         $this->assertSame('Marketing', $data['actionPlan'][0]['category']);
+    }
+
+    public function test_parser_reads_current_not_stale_section_b_block(): void
+    {
+        // SM.1 with a STALE block on top and the CURRENT block below.
+        $book = new Spreadsheet();
+        $book->removeSheetByIndex(0);
+        $sm1 = $book->createSheet(); $sm1->setTitle('SM.1');
+        // Stale block
+        $sm1->setCellValue('B2', 'As of 5 January 2024');
+        $sm1->setCellValue('B3', 'Month');
+        $sm1->setCellValue('B5', 'January'); $sm1->setCellValue('C5', 999);
+        $sm1->setCellValue('B6', 'February'); $sm1->setCellValue('C6', 888);
+        // Current block (below)
+        $sm1->setCellValue('B20', 'As of 1st October 2026');
+        $sm1->setCellValue('B21', 'Month');
+        $sm1->setCellValue('B23', 'January'); $sm1->setCellValue('C23', 432);
+        $sm1->setCellValue('B24', 'February'); $sm1->setCellValue('C24', 374);
+
+        $path = tempnam(sys_get_temp_dir(), 'bk_').'.xlsx';
+        (new Xlsx($book))->save($path);
+
+        $data = (new WeeklyReportParser())->parse($path, 'BKDS_x.xlsx');
+
+        // Must read the current block (432), not the stale one (999).
+        $this->assertSame(432, (int) collect($data['sectionB'])->firstWhere('month', 1)['rn_sold']);
+        $this->assertSame(374, (int) collect($data['sectionB'])->firstWhere('month', 2)['rn_sold']);
     }
 
     public function test_importer_applies_written_sections(): void

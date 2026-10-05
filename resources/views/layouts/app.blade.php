@@ -14,7 +14,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="h-full font-sans">
-        @php($property = \App\Models\Property::where('is_active', true)->orderBy('id')->first())
+        @php($property = \App\Support\Workspace::currentProperty())
+        @php($allProperties = \App\Models\Property::where('is_active', true)->orderBy('code')->get())
         <div class="min-h-full lg:flex" x-data="{ sidebar: false }">
 
             {{-- Sidebar --}}
@@ -56,12 +57,18 @@
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" /></svg>
                             </button>
 
-                            {{-- Property switcher (single property for now) --}}
+                            {{-- Property switcher --}}
                             <div class="hidden items-center gap-2 sm:flex">
                                 <span class="text-xs uppercase tracking-wide text-ink-400">Property</span>
-                                <select class="rounded-lg border-sand-300 bg-white py-1.5 pl-3 pr-8 text-sm font-medium text-ink-800 focus:border-ink-400 focus:ring-ink-400">
-                                    <option>{{ $property?->name ?? 'Blue Karma Dijiwa Seminyak' }}</option>
-                                </select>
+                                <form method="POST" action="{{ route('property.switch') }}">
+                                    @csrf
+                                    <select name="property_id" onchange="this.form.submit()"
+                                        class="rounded-lg border-sand-300 bg-white py-1.5 pl-3 pr-8 text-sm font-medium text-ink-800 focus:border-ink-400 focus:ring-ink-400">
+                                        @foreach($allProperties as $p)
+                                            <option value="{{ $p->id }}" @selected($property && $p->id === $property->id)>{{ $p->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </form>
                             </div>
                         </div>
 

@@ -57,9 +57,17 @@ class WeeklyReportParser
             return [];
         }
 
+        // SM.1 can contain several stacked "Year to Date" blocks (an old one on
+        // top, the current one below). Use the LAST block — the most recent
+        // "As of …" figures — not the stale one at the top.
+        $startRow = $this->lastSectionBStart($sheet);
+        if ($startRow === null) {
+            return [];
+        }
+
         $rows = [];
         for ($i = 0; $i < 12; $i++) {
-            $r = 5 + $i; // Excel rows 5..16
+            $r = $startRow + $i;
             $rows[] = [
                 'month' => $i + 1,
                 'rn_sold' => $this->num($sheet, "C{$r}"),
@@ -76,6 +84,39 @@ class WeeklyReportParser
         }
 
         return $rows;
+    }
+
+    /**
+     * Row number of "January" in the last YTD block of SM.1, or null.
+     * Each vertical YTD block is anchored by a "Month" header row; the current
+     * figures are in the LAST such block. (Horizontal budget grids use
+     * "JANUARY"/"FEBRUARY" as column headers and have no "Month" row, so they
+     * are ignored.)
+     */
+    private function lastSectionBStart($sheet): ?int
+    {
+        $highest = $sheet->getHighestDataRow();
+
+        // Find the last "Month" header row.
+        $headerRow = null;
+        for ($r = 1; $r <= $highest; $r++) {
+            if (strtolower($this->str($sheet, "B{$r}")) === 'month') {
+                $headerRow = $r;
+            }
+        }
+        if ($headerRow === null) {
+            return null;
+        }
+
+        // The January data row sits 1–4 rows below the header (a sub-header may
+        // intervene). Require a numeric RN value in column C to be safe.
+        for ($r = $headerRow + 1; $r <= $headerRow + 4 && $r <= $highest; $r++) {
+            if (strtolower($this->str($sheet, "B{$r}")) === 'january' && $this->num($sheet, "C{$r}") !== null) {
+                return $r;
+            }
+        }
+
+        return null;
     }
 
     /** Section C (SM.2) and D (SM.3): label=B, rn=C, gross=F. */
