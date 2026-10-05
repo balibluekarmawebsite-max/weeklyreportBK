@@ -13,6 +13,8 @@ use App\Support\Workspace;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class SettingsController extends Controller
 {
@@ -50,8 +52,19 @@ class SettingsController extends Controller
 
     public function updateAi(Request $request): RedirectResponse
     {
+        // Changing the global AI model is an admin-only action (also enforced by
+        // the route's can:manage-settings middleware).
+        Gate::authorize('manage-settings');
+
+        // Only a known model, or the current .env default, may be stored — never
+        // an arbitrary free-form string.
+        $allowed = array_values(array_unique(array_merge(
+            array_keys(self::GROQ_MODELS),
+            [(string) config('services.groq.model')],
+        )));
+
         $data = $request->validate([
-            'groq_model' => ['required', 'string', 'max:100'],
+            'groq_model' => ['required', 'string', Rule::in($allowed)],
         ]);
 
         Setting::put('ai', 'groq_model', $data['groq_model']);

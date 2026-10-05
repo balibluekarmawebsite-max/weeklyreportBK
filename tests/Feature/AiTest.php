@@ -161,13 +161,32 @@ class AiTest extends TestCase
             ->assertSet('anomaliesChecked', true);
     }
 
-    public function test_settings_shows_ai_card_and_saves_model(): void
+    public function test_settings_shows_ai_card_and_admin_saves_model(): void
     {
         $this->get(route('settings.index'))->assertOk()->assertSee('AI drafting (Groq)');
 
+        // setUp acts as the seeded admin.
         $this->put(route('settings.ai.update'), ['groq_model' => 'llama-3.1-8b-instant'])
             ->assertRedirect();
 
         $this->assertSame('llama-3.1-8b-instant', Setting::get('ai', 'groq_model'));
+    }
+
+    public function test_non_admin_cannot_change_ai_model(): void
+    {
+        $this->actingAs(User::factory()->create()) // a fresh user has no admin role
+            ->put(route('settings.ai.update'), ['groq_model' => 'llama-3.1-8b-instant'])
+            ->assertForbidden();
+
+        $this->assertNull(Setting::get('ai', 'groq_model'));
+    }
+
+    public function test_unknown_ai_model_is_rejected(): void
+    {
+        // setUp acts as the admin, so this passes the gate but fails validation.
+        $this->put(route('settings.ai.update'), ['groq_model' => 'evil/custom-model'])
+            ->assertSessionHasErrors('groq_model');
+
+        $this->assertNull(Setting::get('ai', 'groq_model'));
     }
 }

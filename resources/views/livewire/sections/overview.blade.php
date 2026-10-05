@@ -55,7 +55,7 @@
                     wire:model.blur="rows.{{ $i }}.body" placeholder="Write the {{ strtolower($row['heading']) }} commentary…"></textarea>
 
                 @if($aiReady && ! $readonly)
-                    <div class="mt-2 flex flex-wrap items-center gap-2" wire:loading.class="opacity-50" wire:target="draftWithAi({{ $i }}),aiRewrite({{ $i }})">
+                    <div class="mt-2 flex flex-wrap items-center gap-2" wire:loading.class="opacity-50" wire:target="draftWithAi,aiRewrite">
                         <button wire:click="draftWithAi({{ $i }})" wire:loading.attr="disabled" wire:target="draftWithAi({{ $i }})"
                             class="inline-flex items-center gap-1 rounded-md border border-gold-300 bg-gold-50 px-2.5 py-1 text-xs font-medium text-gold-700 hover:bg-gold-100 disabled:opacity-60">
                             <span wire:loading.remove wire:target="draftWithAi({{ $i }})">✨ Draft with AI</span>

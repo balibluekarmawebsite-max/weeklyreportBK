@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ReportWeekController;
 use App\Http\Controllers\SettingsController;
 use App\Livewire\Actions\Logout;
+use App\Support\Workspace;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,9 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Switch the active property (top-bar switcher).
-    Route::post('switch-property', function (\Illuminate\Http\Request $request) {
+    Route::post('switch-property', function (Request $request) {
         $data = $request->validate(['property_id' => ['required', 'exists:properties,id']]);
-        \App\Support\Workspace::setProperty((int) $data['property_id']);
+        Workspace::setProperty((int) $data['property_id']);
 
         return back();
     })->name('property.switch');
@@ -29,12 +32,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Phase placeholders — screens are built in later phases (see docs/PLAN.md section 8).
     Route::view('imports', 'imports.index')->name('imports.index');
     Route::view('departments', 'departments.index')->name('departments.index');
-    Route::get('exports', [\App\Http\Controllers\ExportController::class, 'index'])->name('exports.index');
-    Route::get('exports/{reportWeek}/excel', [\App\Http\Controllers\ExportController::class, 'excel'])->name('exports.excel');
-    Route::get('exports/{reportWeek}/pdf', [\App\Http\Controllers\ExportController::class, 'pdf'])->name('exports.pdf');
-    Route::get('exports/{reportWeek}/word', [\App\Http\Controllers\ExportController::class, 'word'])->name('exports.word');
+    Route::get('exports', [ExportController::class, 'index'])->name('exports.index');
+    Route::get('exports/{reportWeek}/excel', [ExportController::class, 'excel'])->name('exports.excel');
+    Route::get('exports/{reportWeek}/pdf', [ExportController::class, 'pdf'])->name('exports.pdf');
+    Route::get('exports/{reportWeek}/word', [ExportController::class, 'word'])->name('exports.word');
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::put('settings/ai', [SettingsController::class, 'updateAi'])->name('settings.ai.update');
+    Route::put('settings/ai', [SettingsController::class, 'updateAi'])->middleware('can:manage-settings')->name('settings.ai.update');
 });
 
 // Profile (Breeze)

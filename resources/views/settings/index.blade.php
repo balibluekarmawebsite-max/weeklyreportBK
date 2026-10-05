@@ -26,21 +26,29 @@
                 </dd>
             </dl>
 
-            <form method="POST" action="{{ route('settings.ai.update') }}" class="mt-4">
-                @csrf
-                @method('PUT')
-                <label for="groq_model" class="block text-[10px] uppercase tracking-wide text-ink-400">Model</label>
-                <select id="groq_model" name="groq_model" class="mt-1 w-full rounded border-sand-300 bg-white px-2 py-1.5 text-sm focus:border-ink-400 focus:ring-ink-400">
-                    @foreach($groqModels as $value => $label)
-                        <option value="{{ $value }}" @selected($value === $groqModel)>{{ $label }}</option>
-                    @endforeach
-                </select>
-                @error('groq_model')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
-                <div class="mt-3 flex items-center gap-2">
-                    <button type="submit" class="inline-flex items-center rounded-lg bg-ink-700 px-4 py-2 text-sm font-medium text-white hover:bg-ink-600">Save AI settings</button>
-                    @if(session('status') === 'ai-updated')<span class="text-xs text-emerald-600">Saved.</span>@endif
-                </div>
-            </form>
+            @can('manage-settings')
+                <form method="POST" action="{{ route('settings.ai.update') }}" class="mt-4">
+                    @csrf
+                    @method('PUT')
+                    <label for="groq_model" class="block text-[10px] uppercase tracking-wide text-ink-400">Model</label>
+                    <select id="groq_model" name="groq_model" class="mt-1 w-full rounded border-sand-300 bg-white px-2 py-1.5 text-sm focus:border-ink-400 focus:ring-ink-400">
+                        @foreach($groqModels as $value => $label)
+                            <option value="{{ $value }}" @selected($value === $groqModel)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                    @error('groq_model')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                    <div class="mt-3 flex items-center gap-2">
+                        <button type="submit" class="inline-flex items-center rounded-lg bg-ink-700 px-4 py-2 text-sm font-medium text-white hover:bg-ink-600">Save AI settings</button>
+                        @if(session('status') === 'ai-updated')<span class="text-xs text-emerald-600">Saved.</span>@endif
+                    </div>
+                </form>
+            @else
+                <dl class="mt-4 grid grid-cols-2 gap-y-3 text-sm">
+                    <dt class="text-ink-400">Model</dt>
+                    <dd class="text-ink-800">{{ $groqModels[$groqModel] ?? $groqModel }}</dd>
+                </dl>
+                <p class="mt-3 text-xs text-ink-400">Only an administrator can change the AI model.</p>
+            @endcan
 
             @unless($groqKeyConfigured)
                 <p class="mt-3 text-xs text-ink-400">Get a free key at <span class="text-ink-600">console.groq.com/keys</span>, then set <code class="rounded bg-sand-100 px-1">GROQ_API_KEY</code> in <code class="rounded bg-sand-100 px-1">.env</code> to switch AI on.</p>

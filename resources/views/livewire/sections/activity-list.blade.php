@@ -8,7 +8,7 @@
                 <p class="text-xs text-ink-500">Add each activity with its date and notes.</p>
             </div>
             @unless($readonly)
-                <button wire:click="save" wire:loading.attr="disabled"
+                <button wire:click="save" wire:loading.attr="disabled" wire:target="save"
                     class="inline-flex items-center gap-2 rounded-lg bg-ink-700 px-4 py-2 text-sm font-medium text-white hover:bg-ink-600 disabled:opacity-60">
                     <span wire:loading.remove wire:target="save">Save</span>
                     <span wire:loading wire:target="save">Saving…</span>
