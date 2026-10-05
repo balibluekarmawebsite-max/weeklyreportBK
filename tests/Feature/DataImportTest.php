@@ -62,10 +62,16 @@ class DataImportTest extends TestCase
         $sm4->fromArray(['Booking.com', 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], null, 'B6');
 
         $owner = $book->createSheet(); $owner->setTitle('OWNER OVERVIEW');
+        // Repeater table (header + rows + TOTAL)
+        $owner->setCellValue('C5', 'Month'); $owner->setCellValue('D5', 'Total Room Nights');
         $owner->setCellValue('C6', 'September 2026'); $owner->setCellValue('D6', 60); $owner->setCellValue('F6', 190000000);
         $owner->setCellValue('C7', 'October 2026'); $owner->setCellValue('D7', 28); $owner->setCellValue('F7', 67000000);
+        $owner->setCellValue('C8', 'TOTAL'); $owner->setCellValue('D8', 88);
+        // Channel mix table (header + rows + Total)
+        $owner->setCellValue('C29', 'Source'); $owner->setCellValue('D29', 'Room Nights Sold');
         $owner->setCellValue('C30', 'OTA'); $owner->setCellValue('D30', 84); $owner->setCellValue('G30', 265000000);
         $owner->setCellValue('C31', 'Direct'); $owner->setCellValue('D31', 21); $owner->setCellValue('G31', 52000000);
+        $owner->setCellValue('C32', 'Total'); $owner->setCellValue('D32', 105);
 
         // Written sections
         $sm = $book->createSheet(); $sm->setTitle('SM');
@@ -140,18 +146,20 @@ class DataImportTest extends TestCase
         $sm1->setCellValue('B3', 'Month');
         $sm1->setCellValue('B5', 'January'); $sm1->setCellValue('C5', 999);
         $sm1->setCellValue('B6', 'February'); $sm1->setCellValue('C6', 888);
-        // Current block (below)
-        $sm1->setCellValue('B20', 'As of 1st October 2026');
-        $sm1->setCellValue('B21', 'Month');
+        // Current block (below), with a "Month - 2026" header like BKV's file.
+        $sm1->setCellValue('B19', 'YEAR TO DATE ACTUAL & ON HAND FORECAST 2026');
+        $sm1->setCellValue('B20', 'As 1st October 2026');
+        $sm1->setCellValue('B21', 'Month - 2026');
         $sm1->setCellValue('B23', 'January'); $sm1->setCellValue('C23', 432);
         $sm1->setCellValue('B24', 'February'); $sm1->setCellValue('C24', 374);
 
         $path = tempnam(sys_get_temp_dir(), 'bk_').'.xlsx';
         (new Xlsx($book))->save($path);
 
-        $data = (new WeeklyReportParser())->parse($path, 'BKDS_x.xlsx');
+        // Filename year (2026) steers block selection to the current block.
+        $data = (new WeeklyReportParser())->parse($path, 'BKV_Weekly_Report_SM_25_Sep_-_1_Oct_2026.xlsx');
 
-        // Must read the current block (432), not the stale one (999).
+        // Must read the current block (432), not the stale 2024 one (999).
         $this->assertSame(432, (int) collect($data['sectionB'])->firstWhere('month', 1)['rn_sold']);
         $this->assertSame(374, (int) collect($data['sectionB'])->firstWhere('month', 2)['rn_sold']);
     }

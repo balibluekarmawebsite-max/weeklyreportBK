@@ -19,12 +19,14 @@
     @if(!$week)
         <div class="card p-10 text-center text-sm text-ink-500">No report week yet. Import a file or create a week to see the dashboard.</div>
     @else
-        {{-- KPI cards --}}
+        {{-- KPI cards — all figures are for the reporting month --}}
+        @php $m = $currentMonthLabel ?? 'this month'; @endphp
+        <div class="mb-3 text-xs font-medium uppercase tracking-wide text-gold-500">Key figures · {{ $m }} {{ $week->year }}</div>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <x-kpi-card label="Occupancy" :value="$kpis['occupancy']['value'] ?? '–'" sub="vs budget" :variance="$kpis['occupancy']['var'] ?? null" />
-            <x-kpi-card label="ADR" :value="$kpis['adr']['value'] ?? '–'" sub="vs budget" :variance="$kpis['adr']['var'] ?? null" />
-            <x-kpi-card label="Room Revenue" :value="$kpis['revenue']['value'] ?? '–'" sub="vs budget" :variance="$kpis['revenue']['var'] ?? null" />
-            <x-kpi-card label="RN Sold" :value="$kpis['rn']['value'] ?? '–'" sub="this month" />
+            <x-kpi-card :label="'Occupancy · '.$m" :value="$kpis['occupancy']['value'] ?? '–'" sub="vs budget" :variance="$kpis['occupancy']['var'] ?? null" />
+            <x-kpi-card :label="'ADR · '.$m" :value="$kpis['adr']['value'] ?? '–'" sub="vs budget" :variance="$kpis['adr']['var'] ?? null" />
+            <x-kpi-card :label="'Room Revenue · '.$m" :value="$kpis['revenue']['value'] ?? '–'" sub="vs budget" :variance="$kpis['revenue']['var'] ?? null" />
+            <x-kpi-card :label="'RN Sold · '.$m" :value="$kpis['rn']['value'] ?? '–'" :sub="$m" />
         </div>
 
         <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">

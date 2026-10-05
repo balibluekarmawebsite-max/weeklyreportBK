@@ -24,10 +24,11 @@ class WeeklyReportParser
         $book = $reader->load($path);
 
         $meta = $this->meta($book, $originalFilename ?? basename($path));
+        $reportYear = $meta['end_date'] ? (int) substr($meta['end_date'], 0, 4) : null;
 
         $data = [
             'meta' => $meta,
-            'sectionB' => $this->sectionB($book),
+            'sectionB' => $this->sectionB($book, $reportYear),
             'sectionC' => $this->production($book, 'SM.2'),
             'sectionD' => $this->production($book, 'SM.3'),
             'channels' => $this->channels($book),
@@ -50,17 +51,17 @@ class WeeklyReportParser
 
     // ---- sections -------------------------------------------------------
 
-    private function sectionB(Spreadsheet $book): array
+    private function sectionB(Spreadsheet $book, ?int $reportYear = null): array
     {
         $sheet = $this->sheet($book, 'SM.1');
         if (! $sheet) {
             return [];
         }
 
-        // SM.1 can contain several stacked "Year to Date" blocks (an old one on
-        // top, the current one below). Use the LAST block — the most recent
-        // "As of …" figures — not the stale one at the top.
-        $startRow = $this->lastSectionBStart($sheet);
+        // SM.1 stacks several "Year to Date" blocks (older years on top, the
+        // current year below). Pick the block whose heading mentions the report
+        // year; fall back to the last block. Never the stale one on top.
+        $startRow = $this->sectionBStart($sheet, $reportYear);
         if ($startRow === null) {
             return [];
         }
@@ -87,30 +88,47 @@ class WeeklyReportParser
     }
 
     /**
-     * Row number of "January" in the last YTD block of SM.1, or null.
-     * Each vertical YTD block is anchored by a "Month" header row; the current
-     * figures are in the LAST such block. (Horizontal budget grids use
-     * "JANUARY"/"FEBRUARY" as column headers and have no "Month" row, so they
-     * are ignored.)
+     * Row number of "January" in the current YTD block of SM.1, or null.
+     *
+     * Each vertical YTD block is anchored by a header cell in column B that
+     * starts with "Month" (e.g. "Month" or "Month - 2026"). The current block
+     * is the one whose heading area mentions the report year; otherwise the
+     * last block. Horizontal budget grids use "JANUARY"/"FEBRUARY" as column
+     * headers (no "Month" cell) and are ignored.
      */
-    private function lastSectionBStart($sheet): ?int
+    private function sectionBStart($sheet, ?int $reportYear): ?int
     {
         $highest = $sheet->getHighestDataRow();
 
-        // Find the last "Month" header row.
-        $headerRow = null;
+        // Collect every candidate block header (B starts with "Month").
+        $headers = [];
         for ($r = 1; $r <= $highest; $r++) {
-            if (strtolower($this->str($sheet, "B{$r}")) === 'month') {
-                $headerRow = $r;
+            if (str_starts_with(strtolower($this->str($sheet, "B{$r}")), 'month')) {
+                $headers[] = $r;
             }
         }
-        if ($headerRow === null) {
+        if (empty($headers)) {
             return null;
         }
 
+        // Prefer the block whose header row + the 4 rows above mention the year.
+        $chosen = null;
+        if ($reportYear) {
+            foreach ($headers as $h) {
+                $context = $this->str($sheet, "B{$h}");
+                for ($r = max(1, $h - 4); $r < $h; $r++) {
+                    $context .= ' '.$this->str($sheet, "A{$r}").' '.$this->str($sheet, "B{$r}");
+                }
+                if (str_contains($context, (string) $reportYear)) {
+                    $chosen = $h; // keep the last match
+                }
+            }
+        }
+        $chosen ??= end($headers);
+
         // The January data row sits 1–4 rows below the header (a sub-header may
         // intervene). Require a numeric RN value in column C to be safe.
-        for ($r = $headerRow + 1; $r <= $headerRow + 4 && $r <= $highest; $r++) {
+        for ($r = $chosen + 1; $r <= $chosen + 4 && $r <= $highest; $r++) {
             if (strtolower($this->str($sheet, "B{$r}")) === 'january' && $this->num($sheet, "C{$r}") !== null) {
                 return $r;
             }
@@ -130,9 +148,12 @@ class WeeklyReportParser
         $out = [];
         $highest = $sheet->getHighestDataRow();
         $dropped = 0;
-        for ($r = 5; $r <= $highest; $r++) {
+        // Start at row 4 (after the title + "Source/Promotion" header). Header,
+        // blank, subtotal and no-production rows are all skipped below.
+        for ($r = 4; $r <= $highest; $r++) {
             $label = $this->str($sheet, "B{$r}");
-            if ($label === '' || str_contains(strtolower($label), 'total')) {
+            if ($label === '' || str_contains(strtolower($label), 'total')
+                || in_array(strtolower($label), ['source', 'promotion'], true)) {
                 continue;
             }
             $rn = $this->num($sheet, "C{$r}");
@@ -183,6 +204,11 @@ class WeeklyReportParser
         return $out;
     }
 
+    /**
+     * Owner Overview repeater table. Row positions differ per property, so
+     * anchor on the "Month" / "Total Room Nights" header and read until TOTAL.
+     * Month labels can be text or Excel date serials.
+     */
     private function ownerRepeater(Spreadsheet $book): array
     {
         $sheet = $this->sheet($book, 'OWNER OVERVIEW');
@@ -190,14 +216,23 @@ class WeeklyReportParser
             return [];
         }
 
+        $header = $this->ownerHeaderRow($sheet, 'month', 'room night');
+        if ($header === null) {
+            return [];
+        }
+
         $out = [];
-        for ($r = 6; $r <= 18; $r++) {
+        $highest = $sheet->getHighestDataRow();
+        for ($r = $header + 1; $r <= min($header + 20, $highest); $r++) {
             $label = $this->str($sheet, "C{$r}");
-            if ($label === '' || strtolower($label) === 'total') {
+            if ($label === '') {
                 continue;
             }
+            if (strtolower($label) === 'total' || str_starts_with(strtolower($label), 'total')) {
+                break;
+            }
             $out[] = [
-                'label' => $this->monthLabel($label),
+                'label' => $this->ownerMonthLabel($sheet, "C{$r}"),
                 'room_nights' => $this->num($sheet, "D{$r}"),
                 'revenue' => $this->num($sheet, "F{$r}"),
             ];
@@ -206,6 +241,10 @@ class WeeklyReportParser
         return $out;
     }
 
+    /**
+     * Owner Overview channel-mix table. Anchor on the "Source" / "Room Nights
+     * Sold" header and read until Total.
+     */
     private function ownerMix(Spreadsheet $book): array
     {
         $sheet = $this->sheet($book, 'OWNER OVERVIEW');
@@ -213,11 +252,20 @@ class WeeklyReportParser
             return [];
         }
 
+        $header = $this->ownerHeaderRow($sheet, 'source', 'room night');
+        if ($header === null) {
+            return [];
+        }
+
         $out = [];
-        for ($r = 30; $r <= 34; $r++) {
+        $highest = $sheet->getHighestDataRow();
+        for ($r = $header + 1; $r <= min($header + 12, $highest); $r++) {
             $label = $this->str($sheet, "C{$r}");
-            if ($label === '' || strtolower($label) === 'total') {
+            if ($label === '') {
                 continue;
+            }
+            if (str_starts_with(strtolower($label), 'total')) {
+                break;
             }
             $out[] = [
                 'label' => $label,
@@ -227,6 +275,43 @@ class WeeklyReportParser
         }
 
         return $out;
+    }
+
+    /** Find a header row in Owner Overview where col C == $cLabel and col D contains $dContains. */
+    private function ownerHeaderRow($sheet, string $cLabel, string $dContains): ?int
+    {
+        $highest = $sheet->getHighestDataRow();
+        for ($r = 1; $r <= $highest; $r++) {
+            if (strtolower($this->str($sheet, "C{$r}")) === $cLabel
+                && str_contains(strtolower($this->str($sheet, "D{$r}")), $dContains)) {
+                return $r;
+            }
+        }
+
+        return null;
+    }
+
+    /** Month label from a cell that may hold text or an Excel date serial. */
+    private function ownerMonthLabel($sheet, string $coord): string
+    {
+        $v = $this->raw($sheet, $coord);
+        if (is_numeric($v) && $v > 20000 && $v < 80000) {
+            try {
+                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $v)->format('F Y');
+            } catch (\Throwable) {
+                // fall through
+            }
+        }
+        $s = $this->str($sheet, $coord);
+        // Normalise "2026-02-01 00:00:00" style text to "February 2026".
+        if (preg_match('/^\d{4}-\d{2}-\d{2}/', $s)) {
+            try {
+                return \Carbon\Carbon::parse($s)->format('F Y');
+            } catch (\Throwable) {
+            }
+        }
+
+        return $s;
     }
 
     // ---- Phase 4 written sections ---------------------------------------

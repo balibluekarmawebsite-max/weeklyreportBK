@@ -11,6 +11,8 @@ class DashboardController extends Controller
 {
     private const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+    private const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     public function index(): View
     {
         $property = Workspace::currentProperty();
@@ -25,14 +27,16 @@ class DashboardController extends Controller
 
         $stats = $week ? $week->monthlyStats()->orderBy('month')->get()->keyBy('month') : collect();
 
-        // The "current" month = the report week's month, else the latest month with actual revenue.
+        // The report is "as of" its end date, so the headline month is the
+        // end-date month (e.g. week 25 Sep – 1 Oct → October). Fall back to the
+        // latest month that actually has figures.
         $currentMonth = null;
         if ($week) {
-            $m = (int) $week->start_date->format('n');
-            if (optional($stats->get($m))->rev_actual !== null) {
+            $m = (int) $week->end_date->format('n');
+            if (optional($stats->get($m))->rev_actual !== null || optional($stats->get($m))->occ_actual !== null) {
                 $currentMonth = $m;
             } else {
-                $currentMonth = $stats->filter(fn ($s) => $s->rev_actual !== null)->keys()->last();
+                $currentMonth = $stats->filter(fn ($s) => $s->rev_actual !== null || $s->occ_actual !== null)->keys()->last();
             }
         }
         $cur = $currentMonth ? $stats->get($currentMonth) : null;
@@ -41,7 +45,7 @@ class DashboardController extends Controller
             'property' => $property,
             'week' => $week,
             'recentWeeks' => $recentWeeks,
-            'currentMonthLabel' => $currentMonth ? self::MONTHS[$currentMonth - 1] : null,
+            'currentMonthLabel' => $currentMonth ? self::MONTH_NAMES[$currentMonth - 1] : null,
             'kpis' => $this->kpis($cur),
             'charts' => $this->charts($week, $stats),
             'progress' => $this->progress($week),

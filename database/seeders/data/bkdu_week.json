@@ -1606,11 +1606,6 @@
     ],
     "ownerRepeater": [
         {
-            "label": "Month",
-            "room_nights": null,
-            "revenue": null
-        },
-        {
             "label": "September 2025",
             "room_nights": 76,
             "revenue": 227808339
@@ -1636,39 +1631,44 @@
             "revenue": 123041507
         },
         {
-            "label": "46054",
+            "label": "February 2026",
             "room_nights": 46,
             "revenue": 92524673.55
         },
         {
-            "label": "46082",
+            "label": "March 2026",
             "room_nights": 92,
             "revenue": 165768487.2
         },
         {
-            "label": "46113",
+            "label": "April 2026",
             "room_nights": 44,
             "revenue": 127637429
         },
         {
-            "label": "46144",
+            "label": "May 2026",
             "room_nights": 48,
             "revenue": 120107227.2
         },
         {
-            "label": "46176",
+            "label": "June 2026",
             "room_nights": 68,
             "revenue": 192202287.6
         },
         {
-            "label": "46204",
+            "label": "July 2026",
             "room_nights": 26,
             "revenue": 79488166.82
         },
         {
-            "label": "46236",
+            "label": "August 2026",
             "room_nights": 52,
             "revenue": 162106219.2
+        },
+        {
+            "label": "September 2026",
+            "room_nights": 50,
+            "revenue": 146682015
         }
     ],
     "ownerMix": [

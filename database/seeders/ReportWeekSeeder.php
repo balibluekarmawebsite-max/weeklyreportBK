@@ -19,8 +19,9 @@ class ReportWeekSeeder extends Seeder
     {
         $owner = User::where('email', 'ota@bluekarmasecrets.com')->first();
 
-        // Most recent completed Friday as the start of "this week".
-        $thisWeekStart = Carbon::today()->previous(Carbon::FRIDAY);
+        // Anchor on the latest real report period: 25 Sep – 1 Oct 2026 (Fri–Thu),
+        // so the seeded weeks match the sample report we imported.
+        $thisWeekStart = Carbon::parse('2026-09-25');
 
         $samples = [
             [$thisWeekStart->copy(), ReportStatus::InProgress],

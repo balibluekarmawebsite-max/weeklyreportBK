@@ -14,7 +14,7 @@ class PropertySeeder extends Seeder
         $properties = [
             ['code' => 'BKDS', 'name' => 'Blue Karma Dijiwa Seminyak', 'rooms_count' => 16],
             ['code' => 'BKDU', 'name' => 'Blue Karma Dijiwa Ubud', 'rooms_count' => 20],
-            ['code' => 'BKV', 'name' => 'Blue Karma Villas', 'rooms_count' => 15],
+            ['code' => 'BKV', 'name' => 'Blue Karma Village', 'rooms_count' => 15],
         ];
 
         foreach ($properties as $p) {

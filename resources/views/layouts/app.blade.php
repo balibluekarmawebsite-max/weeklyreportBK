@@ -73,10 +73,11 @@
                         </div>
 
                         <div class="flex items-center gap-4">
-                            {{-- Week picker placeholder --}}
+                            {{-- Latest report week for the selected property --}}
+                            @php($latestWeek = $property?->reportWeeks()->latest('start_date')->first())
                             <div class="hidden text-right sm:block">
-                                <div class="text-xs uppercase tracking-wide text-ink-400">Week</div>
-                                <div class="text-sm font-medium text-ink-800">{{ now()->startOfWeek(\Carbon\Carbon::FRIDAY)->format('d M') }} – {{ now()->startOfWeek(\Carbon\Carbon::FRIDAY)->addDays(6)->format('d M Y') }}</div>
+                                <div class="text-xs uppercase tracking-wide text-ink-400">Latest week</div>
+                                <div class="text-sm font-medium text-ink-800">{{ $latestWeek?->label ?? '—' }}</div>
                             </div>
 
                             {{-- User menu --}}

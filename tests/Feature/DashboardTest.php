@@ -44,6 +44,6 @@ class DashboardTest extends TestCase
         $bkv = \App\Models\Property::where('code', 'BKV')->firstOrFail();
         $this->post(route('property.switch'), ['property_id' => $bkv->id])->assertRedirect();
 
-        $this->get(route('dashboard'))->assertSee('Blue Karma Villas');
+        $this->get(route('dashboard'))->assertSee('Blue Karma Village');
     }
 }
