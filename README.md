@@ -37,6 +37,19 @@ php artisan serve
 
 Then open http://localhost:8000.
 
+> **Importing real reports locally?** The weekly-report files are ~8–10 MB, over
+> PHP's default upload limit, so the import will reject them until you raise it.
+> Find your php.ini with `php --ini`, then set (Homebrew Mac path shown):
+> ```sh
+> # edit /opt/homebrew/etc/php/8.3/php.ini
+> upload_max_filesize = 32M
+> post_max_size = 32M
+> memory_limit = 512M
+> ```
+> Save, then restart `php artisan serve`. (Editing php.ini is required —
+> passing `-d` flags to `artisan serve` does not affect its request server.)
+> See the deploy section for the production setting.
+
 **Seeded admin login** (change the password after first login):
 
 - Email: `ota@bluekarmasecrets.com`
@@ -75,6 +88,16 @@ php artisan test
    php artisan queue:work --tries=3
    ```
 7. Enable HTTPS (Let's Encrypt).
+8. **Raise PHP upload limits** — the weekly-report workbooks are ~8–10 MB
+   (they embed screenshots), which exceeds PHP's 2 MB/8 MB defaults. In
+   `php.ini` (or a `conf.d/` override) set:
+   ```ini
+   upload_max_filesize = 32M
+   post_max_size = 32M
+   memory_limit = 512M
+   max_execution_time = 120
+   ```
+   Then reload PHP-FPM. Without this, Data Import rejects the real files.
 
 ---
 

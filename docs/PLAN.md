@@ -81,9 +81,9 @@ Roles via a `roles`/`user_roles` table and Laravel policies/gates (or the `spati
 
 ## 8. Build phases
 
-1. **Foundation:** login, roles, property & week setup, settings (budgets, channel/rate-code lists), design system. _(in progress)_
-2. Data model + manual data entry for Sections B, C, D, E/F, Owner Overview, with automatic calculations (occupancy, ADR, variances, %).
-3. File import with mapping + validation for VHP exports.
+1. **Foundation:** login, roles, property & week setup, settings (budgets, channel/rate-code lists), design system. _(done)_
+2. Data model + manual data entry for Sections B, C, D, E/F, Owner Overview, with automatic calculations (occupancy, ADR, variances, %). _(done)_
+3. File import with mapping + validation for VHP exports. _(done for the SM-format weekly-report workbook: upload → parse → preview/clean → apply, with import history; a VHP-native parser + column mapping plugs into the same pipeline once a raw VHP sample is provided. Note: report files are ~8–10 MB, so PHP upload limits must be raised — see README.)_
 4. Department input forms (G, G2, H, I, J, activity logs) + progress tracking.
 5. Dashboard KPIs and charts.
 6. Exports: Excel, Word, PDF using the shared template; compare against the sample file.
