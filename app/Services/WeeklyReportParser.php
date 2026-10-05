@@ -33,6 +33,13 @@ class WeeklyReportParser
             'channels' => $this->channels($book),
             'ownerRepeater' => $this->ownerRepeater($book),
             'ownerMix' => $this->ownerMix($book),
+            // Phase 4 written sections
+            'overview' => $this->overview($book),
+            'sales' => $this->salesActivity($book),
+            'ecommerce' => $this->ecommerce($book),
+            'social' => $this->social($book),
+            'trainings' => $this->trainings($book),
+            'actionPlan' => $this->actionPlan($book),
             'warnings' => [],
         ];
 
@@ -181,6 +188,159 @@ class WeeklyReportParser
         return $out;
     }
 
+    // ---- Phase 4 written sections ---------------------------------------
+
+    private function overview(Spreadsheet $book): array
+    {
+        $sheet = $this->sheet($book, 'SM');
+        if (! $sheet) {
+            return [];
+        }
+
+        return [
+            'financial' => $this->str($sheet, 'C7'),
+            'market' => $this->str($sheet, 'C11'),
+        ];
+    }
+
+    /** G — Sales Activity (SM.5). Entries start on a dated row; notes span rows. */
+    private function salesActivity(Spreadsheet $book): array
+    {
+        $sheet = $this->sheet($book, 'SM.5');
+        if (! $sheet) {
+            return [];
+        }
+
+        $out = [];
+        $cur = null;
+        $highest = $sheet->getHighestDataRow();
+        for ($r = 4; $r <= $highest; $r++) {
+            $b = $this->str($sheet, "B{$r}");
+            $c = $this->str($sheet, "C{$r}");
+            $d = $this->str($sheet, "D{$r}");
+            if ($b !== '') {
+                if ($cur) {
+                    $out[] = $cur;
+                }
+                $cur = ['date' => $this->dateCell($sheet, "B{$r}"), 'subject' => $c, 'notes' => $d];
+            } elseif ($cur && $d !== '') {
+                $cur['notes'] = trim($cur['notes']."\n".$d);
+            }
+        }
+        if ($cur) {
+            $out[] = $cur;
+        }
+
+        return $out;
+    }
+
+    /** G2 — E-commerce (SM.6). One row per entry. */
+    private function ecommerce(Spreadsheet $book): array
+    {
+        $sheet = $this->sheet($book, 'SM.6');
+        if (! $sheet) {
+            return [];
+        }
+
+        $out = [];
+        $highest = $sheet->getHighestDataRow();
+        for ($r = 6; $r <= $highest; $r++) {
+            $b = $this->str($sheet, "B{$r}");
+            $c = $this->str($sheet, "C{$r}");
+            if ($b === '' && $c === '') {
+                continue;
+            }
+            if (strtolower($b) === 'date') {
+                continue;
+            }
+            $out[] = ['date' => $this->dateCell($sheet, "B{$r}"), 'task' => $c, 'remarks' => $this->str($sheet, "D{$r}")];
+        }
+
+        return $out;
+    }
+
+    /** H — Social Media (SM.7). Row 5 = last week, row 6 = this week. */
+    private function social(Spreadsheet $book): array
+    {
+        $sheet = $this->sheet($book, 'SM.7');
+        if (! $sheet) {
+            return [];
+        }
+
+        $metrics = ['website_visit', 'profile_visit', 'account_reached', 'impression', 'followers'];
+        $cols = ['C', 'D', 'E', 'F', 'G'];
+        $out = [];
+        foreach ($metrics as $i => $m) {
+            $out[] = [
+                'metric' => $m,
+                'last_week' => $this->num($sheet, $cols[$i].'5'),
+                'this_week' => $this->num($sheet, $cols[$i].'6'),
+            ];
+        }
+
+        return $out;
+    }
+
+    /** I — Training (SM.8). */
+    private function trainings(Spreadsheet $book): array
+    {
+        $sheet = $this->sheet($book, 'SM.8');
+        if (! $sheet) {
+            return [];
+        }
+
+        $out = [];
+        $highest = $sheet->getHighestDataRow();
+        for ($r = 5; $r <= $highest; $r++) {
+            $topic = $this->str($sheet, "D{$r}");
+            if ($topic === '' || strtolower($topic) === 'training topic') {
+                continue;
+            }
+            $out[] = [
+                'date' => $this->dateCell($sheet, "C{$r}"),
+                'topic' => $topic,
+                'duration' => $this->str($sheet, "E{$r}"),
+                'trainer' => $this->str($sheet, "F{$r}"),
+                'participants' => $this->str($sheet, "G{$r}"),
+            ];
+        }
+
+        return $out;
+    }
+
+    /** J — Next Week Action Plan (SM.9), grouped by category. */
+    private function actionPlan(Spreadsheet $book): array
+    {
+        $sheet = $this->sheet($book, 'SM.9');
+        if (! $sheet) {
+            return [];
+        }
+
+        $out = [];
+        $cat = null;
+        $highest = $sheet->getHighestDataRow();
+        for ($r = 6; $r <= $highest; $r++) {
+            $b = $this->str($sheet, "B{$r}");
+            $c = $this->str($sheet, "C{$r}");
+            if ($b !== '' && $c === '') {
+                $cat = $b; // category header
+                continue;
+            }
+            if ($c === '' || strtolower($b) === 'no') {
+                continue;
+            }
+            $out[] = [
+                'category' => $cat ?? '',
+                'plan' => $c,
+                'start' => $this->dateCell($sheet, "D{$r}"),
+                'deadline' => $this->dateCell($sheet, "E{$r}"),
+                'remark' => $this->str($sheet, "F{$r}"),
+            ];
+        }
+
+        return $out;
+    }
+
     // ---- meta -----------------------------------------------------------
 
     private function meta(Spreadsheet $book, string $filename): array
@@ -272,6 +432,25 @@ class WeeklyReportParser
     private function str($sheet, string $coord): string
     {
         $v = $this->raw($sheet, $coord);
+
+        return $v === null ? '' : trim((string) $v);
+    }
+
+    /**
+     * A date-bearing cell. Excel stores dates as serial numbers (and
+     * data-only reads skip number formats), so convert a plausible serial to a
+     * "d M Y" string; otherwise return the text as-is.
+     */
+    private function dateCell($sheet, string $coord): string
+    {
+        $v = $this->raw($sheet, $coord);
+        if (is_numeric($v) && $v > 20000 && $v < 80000) {
+            try {
+                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $v)->format('d M Y');
+            } catch (\Throwable) {
+                // fall through
+            }
+        }
 
         return $v === null ? '' : trim((string) $v);
     }

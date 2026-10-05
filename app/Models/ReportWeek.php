@@ -77,4 +77,34 @@ class ReportWeek extends Model
     {
         return $this->hasMany(OwnerChannelMix::class)->orderBy('sort_order');
     }
+
+    /** @return HasMany<OverviewBlock, $this> */
+    public function overviewBlocks(): HasMany
+    {
+        return $this->hasMany(OverviewBlock::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<Activity, $this> */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<SocialMediaMetric, $this> */
+    public function socialMediaMetrics(): HasMany
+    {
+        return $this->hasMany(SocialMediaMetric::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<Training, $this> */
+    public function trainings(): HasMany
+    {
+        return $this->hasMany(Training::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<ActionPlan, $this> */
+    public function actionPlans(): HasMany
+    {
+        return $this->hasMany(ActionPlan::class)->orderBy('sort_order');
+    }
 }

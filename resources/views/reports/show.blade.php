@@ -15,16 +15,16 @@
 
     @php
         $outline = [
-            ['A','A','Overview','phase'],
+            ['A','A','Overview','data'],
             ['B','B','YTD Actual & Forecast','data'],
             ['C','C','Market Segment','data'],
             ['D','D','Rate Code / Promotion','data'],
             ['EF','E/F','Channel Inside','data'],
-            ['G','G','Sales Activity','phase'],
-            ['G2','G2','E-commerce','phase'],
-            ['H','H','Social Media','phase'],
-            ['I','I','Training','phase'],
-            ['J','J','Action Plan','phase'],
+            ['G','G','Sales Activity','data'],
+            ['G2','G2','E-commerce','data'],
+            ['H','H','Social Media','data'],
+            ['I','I','Training','data'],
+            ['J','J','Action Plan','data'],
             ['OWNER','★','Owner Overview','data'],
         ];
     @endphp
@@ -61,6 +61,9 @@
         {{-- Active section --}}
         <div class="min-w-0">
             @switch($section)
+                @case('A')
+                    @livewire('sections.overview', ['week' => $week], key('a-'.$week->id))
+                    @break
                 @case('B')
                     @livewire('sections.monthly-stats', ['week' => $week], key('b-'.$week->id))
                     @break
@@ -72,6 +75,21 @@
                     @break
                 @case('EF')
                     @livewire('sections.channel-grid', ['week' => $week], key('ef-'.$week->id))
+                    @break
+                @case('G')
+                    @livewire('sections.activity-list', ['week' => $week, 'department' => 'sales'], key('g-'.$week->id))
+                    @break
+                @case('G2')
+                    @livewire('sections.activity-list', ['week' => $week, 'department' => 'ecommerce'], key('g2-'.$week->id))
+                    @break
+                @case('H')
+                    @livewire('sections.social-media', ['week' => $week], key('h-'.$week->id))
+                    @break
+                @case('I')
+                    @livewire('sections.trainings', ['week' => $week], key('i-'.$week->id))
+                    @break
+                @case('J')
+                    @livewire('sections.action-plan', ['week' => $week], key('j-'.$week->id))
                     @break
                 @case('OWNER')
                     @livewire('sections.owner-overview', ['week' => $week], key('owner-'.$week->id))

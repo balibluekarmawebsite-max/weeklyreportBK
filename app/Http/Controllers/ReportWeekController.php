@@ -69,12 +69,18 @@ class ReportWeekController extends Controller
     {
         $reportWeek->load('property', 'owner');
 
-        // Which data sections already have rows (for the outline ticks).
+        // Which sections already have content (for the outline ticks).
         $counts = [
+            'A' => $reportWeek->overviewBlocks()->whereNotNull('body')->where('body', '!=', '')->count(),
             'B' => $reportWeek->monthlyStats()->count(),
             'C' => $reportWeek->segmentProductions()->count(),
             'D' => $reportWeek->rateCodeProductions()->count(),
             'EF' => $reportWeek->channelMonthRns()->count(),
+            'G' => $reportWeek->activities()->where('department', 'sales')->count(),
+            'G2' => $reportWeek->activities()->where('department', 'ecommerce')->count(),
+            'H' => $reportWeek->socialMediaMetrics()->whereNotNull('this_week')->count(),
+            'I' => $reportWeek->trainings()->count(),
+            'J' => $reportWeek->actionPlans()->count(),
             'OWNER' => $reportWeek->ownerRepeaterMonths()->count() + $reportWeek->ownerChannelMix()->count(),
         ];
 

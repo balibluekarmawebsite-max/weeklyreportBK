@@ -63,6 +63,31 @@ class DataImportTest extends TestCase
         $owner->setCellValue('C30', 'OTA'); $owner->setCellValue('D30', 84); $owner->setCellValue('G30', 265000000);
         $owner->setCellValue('C31', 'Direct'); $owner->setCellValue('D31', 21); $owner->setCellValue('G31', 52000000);
 
+        // Written sections
+        $sm = $book->createSheet(); $sm->setTitle('SM');
+        $sm->setCellValue('C7', 'Occupancy is below budget this month.');  // financial
+        $sm->setCellValue('C11', 'Market demand remains strong in Seminyak.'); // market
+
+        $sm5 = $book->createSheet(); $sm5->setTitle('SM.5');
+        $sm5->setCellValue('B4', '25 Sep 2026'); $sm5->setCellValue('C4', 'TELEMARKETING'); $sm5->setCellValue('D4', 'Go Asia Bali');
+        $sm5->setCellValue('D5', 'PIC: Ibu Enni'); // continuation note
+
+        $sm6 = $book->createSheet(); $sm6->setTitle('SM.6');
+        $sm6->setCellValue('B6', '25 Sep 2026'); $sm6->setCellValue('C6', 'Check OTA rates'); $sm6->setCellValue('D6', 'Done');
+
+        $sm7 = $book->createSheet(); $sm7->setTitle('SM.7');
+        $sm7->fromArray([48, 558, 43696, 67296, 13211], null, 'C5'); // last week
+        $sm7->fromArray([46, 556, 66453, 40285, 13369], null, 'C6'); // this week
+
+        $sm8 = $book->createSheet(); $sm8->setTitle('SM.8');
+        $sm8->setCellValue('B5', 1); $sm8->setCellValue('C5', '28 Sep 2026'); $sm8->setCellValue('D5', 'Spa Sales Report');
+        $sm8->setCellValue('E5', '30min'); $sm8->setCellValue('F5', 'Ibu Donna'); $sm8->setCellValue('G5', 'Spa team');
+
+        $sm9 = $book->createSheet(); $sm9->setTitle('SM.9');
+        $sm9->setCellValue('B6', 'Marketing'); // category header
+        $sm9->setCellValue('B7', 1); $sm9->setCellValue('C7', 'Run ads'); $sm9->setCellValue('D7', '02 Oct 2026');
+        $sm9->setCellValue('E7', '08 Oct 2026'); $sm9->setCellValue('F7', 'Boost direct bookings');
+
         $path = tempnam(sys_get_temp_dir(), 'bk_').'.xlsx';
         (new Xlsx($book))->save($path);
 
@@ -87,6 +112,38 @@ class DataImportTest extends TestCase
         // 3 channel rows parsed (incl. the duplicate Booking.com).
         $this->assertCount(3, $data['channels']);
         $this->assertNotEmpty($data['warnings']);                   // Agoda skip noted
+
+        // Written sections
+        $this->assertSame('Occupancy is below budget this month.', $data['overview']['financial']);
+        $this->assertCount(1, $data['sales']);
+        $this->assertStringContainsString('PIC: Ibu Enni', $data['sales'][0]['notes']); // continuation merged
+        $this->assertCount(1, $data['ecommerce']);
+        $this->assertCount(5, $data['social']);
+        $this->assertCount(1, $data['trainings']);
+        $this->assertSame('28 Sep 2026', $data['trainings'][0]['date']);  // serial converted
+        $this->assertCount(1, $data['actionPlan']);
+        $this->assertSame('Marketing', $data['actionPlan'][0]['category']);
+    }
+
+    public function test_importer_applies_written_sections(): void
+    {
+        $path = $this->fixtureWorkbook();
+        $data = (new WeeklyReportParser())->parse($path, 'BKDS_Weekly_Report_SM_02_Oct_-_08_Oct_2026.xlsx');
+
+        $property = Property::where('code', 'BKDS')->firstOrFail();
+        $week = ReportWeek::create([
+            'property_id' => $property->id, 'start_date' => '2026-10-02', 'end_date' => '2026-10-08',
+            'year' => 2026, 'week_number' => 40, 'label' => 'wk', 'status' => \App\Enums\ReportStatus::InProgress,
+        ]);
+
+        (new WeeklyReportImporter())->applyToWeek($data, $week);
+
+        $this->assertSame(1, $week->activities()->where('department', 'sales')->count());
+        $this->assertSame(1, $week->activities()->where('department', 'ecommerce')->count());
+        $this->assertSame(5, $week->socialMediaMetrics()->count());
+        $this->assertSame(1, $week->trainings()->count());
+        $this->assertSame(1, $week->actionPlans()->count());
+        $this->assertSame('Boost direct bookings', $week->actionPlans()->first()->remark);
     }
 
     public function test_importer_applies_data_and_merges_duplicate_channels(): void

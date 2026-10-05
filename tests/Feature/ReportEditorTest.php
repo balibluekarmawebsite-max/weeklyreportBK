@@ -32,9 +32,33 @@ class ReportEditorTest extends TestCase
     public function test_each_data_section_renders(): void
     {
         $week = $this->week();
-        foreach (['B', 'C', 'D', 'EF', 'OWNER'] as $section) {
+        foreach (['A', 'B', 'C', 'D', 'EF', 'G', 'G2', 'H', 'I', 'J', 'OWNER'] as $section) {
             $this->get(route('reports.show', $week).'?section='.$section)->assertOk();
         }
+    }
+
+    public function test_trainings_component_saves_a_row(): void
+    {
+        $week = $this->week();
+
+        \Livewire\Livewire::test(\App\Livewire\Sections\Trainings::class, ['week' => $week])
+            ->call('addRow')
+            ->set('rows.'.$week->trainings()->count().'.topic', 'Revenue Management 101')
+            ->set('rows.'.$week->trainings()->count().'.trainer', 'Pak Andika')
+            ->call('save')
+            ->assertSet('saved', true);
+
+        $this->assertDatabaseHas('trainings', [
+            'report_week_id' => $week->id,
+            'topic' => 'Revenue Management 101',
+        ]);
+    }
+
+    public function test_social_media_growth_is_computed(): void
+    {
+        $m = new \App\Models\SocialMediaMetric(['last_week' => 100, 'this_week' => 150]);
+        $this->assertSame(50, $m->growth());
+        $this->assertEqualsWithDelta(50.0, $m->growthPercent(), 0.001);
     }
 
     public function test_seeded_week_shows_real_segment_total(): void

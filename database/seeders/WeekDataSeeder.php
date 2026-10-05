@@ -113,6 +113,93 @@ class WeekDataSeeder extends Seeder
                 'sort_order' => $order++,
             ]);
         }
+
+        // ---- Phase 4 written sections ----
+        $week->overviewBlocks()->delete();
+        $week->activities()->delete();
+        $week->socialMediaMetrics()->delete();
+        $week->trainings()->delete();
+        $week->actionPlans()->delete();
+
+        // Section A — overview blocks (seed what we extracted; others blank).
+        $headings = \App\Livewire\Sections\Overview::BLOCKS;
+        $ov = $data['overview'] ?? [];
+        $order = 0;
+        foreach ($headings as $key => $heading) {
+            \App\Models\OverviewBlock::create([
+                'report_week_id' => $week->id,
+                'key' => $key,
+                'heading' => $heading,
+                'body' => $ov[$key] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        // G — Sales activity / G2 — E-commerce (full dates)
+        $this->seedActivities($week, 'sales', $data['sales'] ?? [], 'subject');
+        $this->seedActivities($week, 'ecommerce', $data['ecommerce'] ?? [], 'task');
+        // (dateLabel keeps the day, unlike monthLabel)
+
+        // H — Social media
+        $order = 0;
+        foreach ($data['social'] ?? [] as $r) {
+            \App\Models\SocialMediaMetric::create([
+                'report_week_id' => $week->id,
+                'platform' => 'Instagram',
+                'metric_key' => $r['metric'],
+                'last_week' => $r['last_week'] !== null ? (int) $r['last_week'] : null,
+                'this_week' => $r['this_week'] !== null ? (int) $r['this_week'] : null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        // I — Training
+        $order = 0;
+        foreach ($data['trainings'] ?? [] as $r) {
+            \App\Models\Training::create([
+                'report_week_id' => $week->id,
+                'date_label' => $this->dateLabel($r['date'] ?? ''),
+                'topic' => $r['topic'],
+                'duration' => $r['duration'] ?? null,
+                'trainer' => $r['trainer'] ?? null,
+                'participants' => $r['participants'] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        // J — Action plan
+        $order = 0;
+        foreach ($data['actionPlan'] ?? [] as $r) {
+            \App\Models\ActionPlan::create([
+                'report_week_id' => $week->id,
+                'category' => $r['category'] ?: null,
+                'plan' => $r['plan'],
+                'start_label' => $this->dateLabel($r['start'] ?? ''),
+                'deadline_label' => $this->dateLabel($r['deadline'] ?? ''),
+                'remark' => $r['remark'] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+    }
+
+    private function seedActivities(ReportWeek $week, string $department, array $rows, string $titleKey): void
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $title = $r[$titleKey] ?? ($r['title'] ?? '');
+            $notes = $r['notes'] ?? ($r['remarks'] ?? '');
+            if (trim((string) $title) === '' && trim((string) $notes) === '') {
+                continue;
+            }
+            \App\Models\Activity::create([
+                'report_week_id' => $week->id,
+                'department' => $department,
+                'date_label' => $this->dateLabel($r['date'] ?? ''),
+                'title' => $title ?: null,
+                'notes' => $notes ?: null,
+                'sort_order' => $order++,
+            ]);
+        }
     }
 
     private function seedProduction(ReportWeek $week, array $rows, string $model): void
@@ -142,6 +229,20 @@ class WeekDataSeeder extends Seeder
         try {
             if (preg_match('/^\d{4}-\d{2}-\d{2}/', $label)) {
                 return Carbon::parse($label)->format('F Y');
+            }
+        } catch (\Throwable) {
+            // fall through
+        }
+
+        return $label;
+    }
+
+    /** Full-date label (keeps the day), e.g. "25 Sep 2026". */
+    private function dateLabel(string $label): string
+    {
+        try {
+            if (preg_match('/^\d{4}-\d{2}-\d{2}/', $label)) {
+                return Carbon::parse($label)->format('d M Y');
             }
         } catch (\Throwable) {
             // fall through
