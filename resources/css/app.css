@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-sand-50 text-ink-800 antialiased;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-serif text-ink-900;
+    }
+}
+
+@layer components {
+    /* Right-aligned tabular figures for every number column. */
+    .num {
+        @apply text-right tabular-nums;
+    }
+
+    /* Sidebar navigation link. */
+    .nav-link {
+        @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-100
+               transition hover:bg-ink-600/60 hover:text-white;
+    }
+
+    .nav-link-active {
+        @apply bg-ink-600 text-white;
+    }
+
+    /* Card surface. */
+    .card {
+        @apply rounded-xl border border-sand-200 bg-white shadow-sm;
+    }
+
+    /* Status badge base. */
+    .badge {
+        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+    }
+}
