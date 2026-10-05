@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Weekly reports
     Route::get('reports', [ReportWeekController::class, 'index'])->name('reports.index');
+    Route::post('reports', [ReportWeekController::class, 'store'])->name('reports.store');
     Route::get('reports/{reportWeek}', [ReportWeekController::class, 'show'])->name('reports.show');
 
     // Phase placeholders — screens are built in later phases (see docs/PLAN.md section 8).

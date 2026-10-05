@@ -6,6 +6,7 @@ use App\Enums\ReportStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'property_id', 'start_date', 'end_date', 'year', 'week_number',
@@ -39,5 +40,41 @@ class ReportWeek extends Model
     public function isLocked(): bool
     {
         return $this->status->isLocked();
+    }
+
+    /** @return HasMany<MonthlyStat, $this> */
+    public function monthlyStats(): HasMany
+    {
+        return $this->hasMany(MonthlyStat::class)->orderBy('month');
+    }
+
+    /** @return HasMany<SegmentProduction, $this> */
+    public function segmentProductions(): HasMany
+    {
+        return $this->hasMany(SegmentProduction::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<RateCodeProduction, $this> */
+    public function rateCodeProductions(): HasMany
+    {
+        return $this->hasMany(RateCodeProduction::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<ChannelMonthRn, $this> */
+    public function channelMonthRns(): HasMany
+    {
+        return $this->hasMany(ChannelMonthRn::class)->orderBy('year')->orderBy('sort_order');
+    }
+
+    /** @return HasMany<OwnerRepeaterMonth, $this> */
+    public function ownerRepeaterMonths(): HasMany
+    {
+        return $this->hasMany(OwnerRepeaterMonth::class)->orderBy('sort_order');
+    }
+
+    /** @return HasMany<OwnerChannelMix, $this> */
+    public function ownerChannelMix(): HasMany
+    {
+        return $this->hasMany(OwnerChannelMix::class)->orderBy('sort_order');
     }
 }

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ListsSeeder::class,
             AdminUserSeeder::class,
             ReportWeekSeeder::class,
+            WeekDataSeeder::class,
         ]);
     }
 }
