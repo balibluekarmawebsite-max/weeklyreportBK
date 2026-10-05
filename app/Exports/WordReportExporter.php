@@ -24,6 +24,11 @@ class WordReportExporter
 
     public function __construct(private ReportData $data)
     {
+        // PHPWord does NOT escape XML special characters (& < >) in text by default,
+        // so any "&" in the data (e.g. "Sales & Marketing") produced an invalid
+        // document.xml that Word refused to open. Enable output escaping globally.
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+
         $this->word = new PhpWord();
         $this->word->getSettings()->setThemeFontLang(new \PhpOffice\PhpWord\Style\Language(\PhpOffice\PhpWord\Style\Language::EN_GB));
         $this->word->addTitleStyle(1, ['bold' => true, 'size' => 15, 'color' => self::INK], ['spaceBefore' => 240, 'spaceAfter' => 120]);

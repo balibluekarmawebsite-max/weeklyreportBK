@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use App\Enums\ReportStatus;
 use App\Exports\ExcelReportExporter;
+use App\Exports\WordReportExporter;
 use App\Models\ReportWeek;
 use App\Models\User;
 use App\Services\ReportData;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpWord\IOFactory as WordIOFactory;
 use Tests\TestCase;
 
 class ExportTest extends TestCase
@@ -51,6 +53,37 @@ class ExportTest extends TestCase
 
         // Exporting stamps the week.
         $this->assertNotNull($week->fresh()->exported_at);
+    }
+
+    public function test_word_document_is_valid_ooxml(): void
+    {
+        // A download succeeding over HTTP does not mean the .docx is valid: an
+        // unescaped "&" once produced a file that downloaded fine but Word refused
+        // to open. Build the document and load it back — a malformed document.xml
+        // throws here.
+        $path = (new WordReportExporter(new ReportData($this->week())))->save();
+
+        $doc = WordIOFactory::load($path, 'Word2007');
+        $this->assertNotEmpty($doc->getSections());
+
+        // The source data contains "&" (e.g. "Sales & Marketing"); make sure it is
+        // present and that reading the document did not choke on it.
+        $xml = $this->documentXml($path);
+        $this->assertStringContainsString('Sales &amp; Marketing', $xml);
+        $this->assertStringNotContainsString('Sales & Marketing', $xml);
+
+        @unlink($path);
+    }
+
+    private function documentXml(string $docxPath): string
+    {
+        $zip = new \ZipArchive;
+        $this->assertTrue($zip->open($docxPath) === true, 'docx is not a valid zip archive');
+        $xml = $zip->getFromName('word/document.xml');
+        $zip->close();
+        $this->assertNotFalse($xml, 'word/document.xml missing from docx');
+
+        return $xml;
     }
 
     public function test_excel_contains_correct_october_figures(): void
