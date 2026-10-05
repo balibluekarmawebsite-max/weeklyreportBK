@@ -184,13 +184,16 @@ class WeeklyReportParser
             $b = $this->str($sheet, "B{$r}");
             $cNum = $this->num($sheet, "C{$r}");
 
-            // Year marker: numeric year in C with empty B.
-            if ($b === '' && $cNum !== null && $cNum > 1900 && $cNum < 2100) {
+            // Year marker: a year value in column C. Column B is usually empty
+            // but some files leave a stray number there (e.g. "2"), so we accept
+            // the marker as long as B is not a real (alphabetic) source name.
+            if ($cNum !== null && $cNum >= 2018 && $cNum <= 2100 && ($b === '' || is_numeric($b))) {
                 $year = (int) $cNum;
 
                 continue;
             }
-            if ($year === null || $b === '' || in_array(strtolower($b), ['source', 'total'], true)) {
+            if ($year === null || $b === '' || is_numeric($b)
+                || in_array(strtolower($b), ['source', 'total'], true)) {
                 continue;
             }
             // Month room nights in cols C..N.

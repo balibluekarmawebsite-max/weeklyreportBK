@@ -164,6 +164,36 @@ class DataImportTest extends TestCase
         $this->assertSame(374, (int) collect($data['sectionB'])->firstWhere('month', 2)['rn_sold']);
     }
 
+    public function test_channel_year_marker_with_stray_cell_is_detected(): void
+    {
+        // BKDU's SM.4 2026 year marker has a stray "2" in column B.
+        $book = new Spreadsheet();
+        $book->removeSheetByIndex(0);
+        $sm4 = $book->createSheet(); $sm4->setTitle('SM.4');
+        // 2025 block
+        $sm4->setCellValue('C1', 2025);
+        $sm4->setCellValue('B2', 'Source'); $sm4->setCellValue('C2', 'Month');
+        $sm4->setCellValue('C3', 'Jan');
+        $sm4->fromArray(['Booking.com', 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], null, 'B4');
+        $sm4->setCellValue('B5', 'TOTAL');
+        // 2026 block with a stray "2" in B of the year-marker row
+        $sm4->setCellValue('B7', 2); $sm4->setCellValue('C7', 2026);
+        $sm4->setCellValue('B8', 'Source'); $sm4->setCellValue('C8', 'Month');
+        $sm4->setCellValue('C9', 'Jan');
+        $sm4->fromArray(['Booking.com', 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], null, 'B10');
+
+        $path = tempnam(sys_get_temp_dir(), 'bk_').'.xlsx';
+        (new Xlsx($book))->save($path);
+
+        $data = (new WeeklyReportParser())->parse($path, 'BKDU_x_25_Sep_-_1_Oct_2026.xlsx');
+        $ch = collect($data['channels']);
+
+        // 2026 Booking.com = 150 (100+50), assigned to 2026 not 2025, no "2" junk row.
+        $this->assertSame(150, array_sum($ch->firstWhere(fn ($c) => $c['year'] === 2026 && $c['source'] === 'Booking.com')['months']));
+        $this->assertSame(20, array_sum($ch->firstWhere(fn ($c) => $c['year'] === 2025 && $c['source'] === 'Booking.com')['months']));
+        $this->assertCount(0, $ch->filter(fn ($c) => is_numeric($c['source'])));
+    }
+
     public function test_importer_applies_written_sections(): void
     {
         $path = $this->fixtureWorkbook();
