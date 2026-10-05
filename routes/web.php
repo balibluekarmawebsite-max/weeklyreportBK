@@ -29,7 +29,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Phase placeholders — screens are built in later phases (see docs/PLAN.md section 8).
     Route::view('imports', 'imports.index')->name('imports.index');
     Route::view('departments', 'departments.index')->name('departments.index');
-    Route::view('exports', 'exports.index')->name('exports.index');
+    Route::get('exports', [\App\Http\Controllers\ExportController::class, 'index'])->name('exports.index');
+    Route::get('exports/{reportWeek}/excel', [\App\Http\Controllers\ExportController::class, 'excel'])->name('exports.excel');
+    Route::get('exports/{reportWeek}/pdf', [\App\Http\Controllers\ExportController::class, 'pdf'])->name('exports.pdf');
+    Route::get('exports/{reportWeek}/word', [\App\Http\Controllers\ExportController::class, 'word'])->name('exports.word');
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
 });
 
