@@ -19,6 +19,7 @@
         @if($saved)
             <div class="mx-5 mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700" x-data x-init="setTimeout(() => $el.remove(), 2500)">Saved.</div>
         @endif
+        @if($aiError)<div class="mx-5 mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{{ $aiError }}</div>@endif
 
         <div class="divide-y divide-sand-100">
             @foreach($rows as $i => $row)
@@ -32,6 +33,15 @@
                     <div>
                         <label class="text-[10px] uppercase tracking-wide text-ink-400">Notes / remarks</label>
                         <textarea {{ $readonly?'disabled':'' }} rows="3" class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.notes" placeholder="Details…"></textarea>
+                        @if($aiReady && ! $readonly)
+                            <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs" wire:loading.class="opacity-50" wire:target="aiRewrite({{ $i }}, 'notes', 'rewrite'),aiRewrite({{ $i }}, 'notes', 'shorten'),aiRewrite({{ $i }}, 'notes', 'translate_id'),aiRewrite({{ $i }}, 'notes', 'translate_en')">
+                                <span class="text-gold-600">✨</span>
+                                <button wire:click="aiRewrite({{ $i }}, 'notes', 'rewrite')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'notes', 'rewrite')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60">Rewrite</button>
+                                <button wire:click="aiRewrite({{ $i }}, 'notes', 'shorten')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'notes', 'shorten')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60">Shorten</button>
+                                <button wire:click="aiRewrite({{ $i }}, 'notes', 'translate_id')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'notes', 'translate_id')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60" title="Translate to Indonesian">→ ID</button>
+                                <button wire:click="aiRewrite({{ $i }}, 'notes', 'translate_en')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'notes', 'translate_en')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60" title="Translate to English">→ EN</button>
+                            </div>
+                        @endif
                     </div>
                     <div class="flex items-start pt-5">
                         @unless($readonly)

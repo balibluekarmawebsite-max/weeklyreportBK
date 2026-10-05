@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('exports/{reportWeek}/pdf', [\App\Http\Controllers\ExportController::class, 'pdf'])->name('exports.pdf');
     Route::get('exports/{reportWeek}/word', [\App\Http\Controllers\ExportController::class, 'word'])->name('exports.word');
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::put('settings/ai', [SettingsController::class, 'updateAi'])->name('settings.ai.update');
 });
 
 // Profile (Breeze)

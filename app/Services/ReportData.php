@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\MonthlyStat;
 use App\Models\ReportWeek;
 use App\Support\ReportCalculator;
 use Illuminate\Support\Collection;
@@ -28,7 +29,6 @@ class ReportData
         return $this->week->property;
     }
 
-    /** @return Collection */
     public function monthlyStats(): Collection
     {
         return $this->week->monthlyStats->sortBy('month')->values();
@@ -37,6 +37,32 @@ class ReportData
     public function monthlyTotals(): array
     {
         return ReportCalculator::monthlyTotals($this->monthlyStats());
+    }
+
+    /**
+     * The headline month (1–12): the week's end-date month if it has figures,
+     * else the latest month that does. Mirrors the dashboard so narrative and
+     * KPIs agree. Null when no month has data.
+     */
+    public function currentMonth(): ?int
+    {
+        $stats = $this->monthlyStats()->keyBy('month');
+        $hasData = fn ($s) => $s && ($s->rev_actual !== null || $s->occ_actual !== null);
+
+        $end = (int) $this->week->end_date->format('n');
+        if ($hasData($stats->get($end))) {
+            return $end;
+        }
+
+        return $stats->filter($hasData)->keys()->last();
+    }
+
+    /** The MonthlyStat row for {@see currentMonth()}, or null. */
+    public function currentStat(): ?MonthlyStat
+    {
+        $m = $this->currentMonth();
+
+        return $m ? $this->monthlyStats()->firstWhere('month', $m) : null;
     }
 
     public function segments(): Collection

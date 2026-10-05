@@ -5,6 +5,8 @@ namespace App\Livewire\Sections;
 use App\Models\ActionPlan as ActionPlanModel;
 use App\Models\ActivityLog;
 use App\Models\ReportWeek;
+use App\Services\Ai\AiException;
+use App\Services\Ai\ReportNarrator;
 use Livewire\Component;
 
 /** Section J — Next Week Action Plan (grouped by category). */
@@ -16,6 +18,8 @@ class ActionPlan extends Component
     public array $rows = [];
 
     public bool $saved = false;
+
+    public ?string $aiError = null;
 
     public function mount(ReportWeek $week): void
     {
@@ -75,8 +79,30 @@ class ActionPlan extends Component
         $this->mount($this->week);
     }
 
+    /** Rewrite / shorten / translate a row's free-text field with AI. */
+    public function aiRewrite(int $i, string $field, string $mode, ReportNarrator $narrator): void
+    {
+        $this->aiError = null;
+        if ($this->week->isLocked() || ! isset($this->rows[$i]) || ! in_array($field, ['plan', 'remark'], true)) {
+            return;
+        }
+        if (trim((string) ($this->rows[$i][$field] ?? '')) === '') {
+            $this->aiError = 'Write some text first, then let AI rewrite it.';
+
+            return;
+        }
+
+        try {
+            $this->rows[$i][$field] = $narrator->rewrite($this->week, 'action_plan', $field, (string) $this->rows[$i][$field], $mode);
+        } catch (AiException $e) {
+            $this->aiError = $e->getMessage();
+        }
+    }
+
     public function render()
     {
-        return view('livewire.sections.action-plan');
+        return view('livewire.sections.action-plan', [
+            'aiReady' => app(ReportNarrator::class)->enabled(),
+        ]);
     }
 }

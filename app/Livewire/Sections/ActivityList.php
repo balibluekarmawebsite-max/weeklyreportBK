@@ -5,6 +5,8 @@ namespace App\Livewire\Sections;
 use App\Models\Activity;
 use App\Models\ActivityLog;
 use App\Models\ReportWeek;
+use App\Services\Ai\AiException;
+use App\Services\Ai\ReportNarrator;
 use Livewire\Component;
 
 /**
@@ -21,6 +23,8 @@ class ActivityList extends Component
     public array $rows = [];
 
     public bool $saved = false;
+
+    public ?string $aiError = null;
 
     public function mount(ReportWeek $week, string $department = 'sales'): void
     {
@@ -76,6 +80,26 @@ class ActivityList extends Component
         $this->mount($this->week, $this->department);
     }
 
+    /** Rewrite / shorten / translate a row's free-text field with AI. */
+    public function aiRewrite(int $i, string $field, string $mode, ReportNarrator $narrator): void
+    {
+        $this->aiError = null;
+        if ($this->week->isLocked() || ! isset($this->rows[$i]) || ! in_array($field, ['title', 'notes'], true)) {
+            return;
+        }
+        if (trim((string) ($this->rows[$i][$field] ?? '')) === '') {
+            $this->aiError = 'Write some text first, then let AI rewrite it.';
+
+            return;
+        }
+
+        try {
+            $this->rows[$i][$field] = $narrator->rewrite($this->week, $this->department, $field, (string) $this->rows[$i][$field], $mode);
+        } catch (AiException $e) {
+            $this->aiError = $e->getMessage();
+        }
+    }
+
     public function heading(): string
     {
         return match ($this->department) {
@@ -92,6 +116,8 @@ class ActivityList extends Component
 
     public function render()
     {
-        return view('livewire.sections.activity-list');
+        return view('livewire.sections.activity-list', [
+            'aiReady' => app(ReportNarrator::class)->enabled(),
+        ]);
     }
 }
