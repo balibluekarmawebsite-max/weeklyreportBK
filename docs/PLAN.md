@@ -87,8 +87,8 @@ Roles via a `roles`/`user_roles` table and Laravel policies/gates (or the `spati
 4. Department input forms (G, G2, H, I, J, activity logs) + progress tracking.
 5. Dashboard KPIs and charts.
 6. Exports: Excel, Word, PDF using the shared template; compare against the sample file.
-7. Groq AI drafting and rewriting.
-8. Playwright VHP robot + secure import endpoint + scheduling.
+7. Groq AI drafting and rewriting. _(done — Section A drafting + rewrite/shorten/translate on notes, grounded on the figures; anomaly scan; Settings model selector. Needs `GROQ_API_KEY` in `.env`.)_
+8. Playwright VHP robot + secure import endpoint + scheduling. _(done — the HMAC-signed `POST /api/vhp-import` endpoint reuses the manual-import pipeline and records source=VHP; the `tools/vhp-robot` Node script signs + uploads (works today via `--file`) and scaffolds the VHP login/export, which needs VHP's real page selectors + one raw export sample to finish. Secret in `VHP_IMPORT_SECRET`.)_
 9. History, week-to-week comparison, multi-property rollout.
 
 ## 9. Technical details (Bluehost VPS + Laravel)

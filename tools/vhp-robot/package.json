@@ -1,0 +1,17 @@
+{
+  "name": "vhp-robot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Downloads the weekly report from VHP and posts it to the dashboard's secure import endpoint (HMAC-signed). See README.md.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "upload": "node --env-file=.env index.mjs",
+    "test-upload": "node --env-file=.env index.mjs --file"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}

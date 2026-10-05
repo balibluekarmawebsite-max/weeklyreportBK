@@ -45,4 +45,13 @@ return [
         'timeout' => (int) env('GROQ_TIMEOUT', 45),
     ],
 
+    // VHP auto-import. The robot signs each upload with this shared secret
+    // (HMAC-SHA256); requests without a valid signature are rejected. The
+    // secret lives only in .env, never in the database. See docs/PLAN.md §4 & §8.
+    'vhp' => [
+        'import_secret' => env('VHP_IMPORT_SECRET'),
+        // Max seconds a signed request may be old (replay protection).
+        'timestamp_tolerance' => (int) env('VHP_IMPORT_TOLERANCE', 300),
+    ],
+
 ];

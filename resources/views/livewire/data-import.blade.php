@@ -118,6 +118,7 @@
                 <thead>
                     <tr class="border-b border-sand-200 text-left text-xs uppercase tracking-wide text-ink-400">
                         <th class="px-5 py-2 font-medium">File</th>
+                        <th class="px-5 py-2 font-medium">Source</th>
                         <th class="px-5 py-2 font-medium">Property</th>
                         <th class="px-5 py-2 font-medium">Period</th>
                         <th class="px-5 py-2 font-medium">Status</th>
@@ -128,6 +129,13 @@
                     @foreach($history as $imp)
                         <tr>
                             <td class="px-5 py-2 text-ink-700">{{ \Illuminate\Support\Str::limit($imp->original_filename, 40) }}</td>
+                            <td class="px-5 py-2">
+                                @if($imp->source === 'vhp')
+                                    <span class="badge bg-gold-100 text-gold-600">VHP robot</span>
+                                @else
+                                    <span class="badge bg-slate-100 text-slate-500">Manual</span>
+                                @endif
+                            </td>
                             <td class="px-5 py-2 text-ink-600">{{ $imp->property?->code ?? '–' }}</td>
                             <td class="px-5 py-2 text-ink-600">{{ $imp->period_label ?? '–' }}</td>
                             <td class="px-5 py-2">

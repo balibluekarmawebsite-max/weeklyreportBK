@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
-    'user_id', 'property_id', 'report_week_id', 'original_filename', 'stored_path',
+    'user_id', 'property_id', 'report_week_id', 'source', 'original_filename', 'stored_path',
     'status', 'period_label', 'summary', 'warnings', 'error', 'applied_at',
 ])]
 class Import extends Model

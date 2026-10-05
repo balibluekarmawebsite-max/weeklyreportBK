@@ -2,15 +2,12 @@
 
 namespace App\Livewire;
 
-use App\Enums\ReportStatus;
 use App\Models\ActivityLog;
 use App\Models\Import;
 use App\Models\Property;
-use App\Models\ReportWeek;
+use App\Services\WeeklyImportPipeline;
 use App\Services\WeeklyReportImporter;
 use App\Services\WeeklyReportParser;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -49,7 +46,7 @@ class DataImport extends Component
         $original = $this->file->getClientOriginalName();
 
         try {
-            $parser = new WeeklyReportParser();
+            $parser = new WeeklyReportParser;
             $this->parsed = $parser->parse($path, $original);
         } catch (\Throwable $e) {
             Import::create([
@@ -67,7 +64,7 @@ class DataImport extends Component
         $stored = $this->file->store('imports');
 
         $meta = $this->parsed['meta'];
-        $property = (new WeeklyReportImporter())->resolveProperty($meta);
+        $property = (new WeeklyReportImporter)->resolveProperty($meta);
         $this->propertyId = $property?->id;
         $this->startDate = $meta['start_date'];
 
@@ -92,36 +89,16 @@ class DataImport extends Component
             'startDate' => 'required|date',
         ], [], ['propertyId' => 'property', 'startDate' => 'week start date']);
 
-        $start = Carbon::parse($this->startDate);
-        if (! $start->isFriday()) {
-            $start = $start->previous(Carbon::FRIDAY);
-        }
-        $end = $start->copy()->addDays(6);
+        $resolved = (new WeeklyImportPipeline)->findOrCreateWeek($this->propertyId, $this->startDate, auth()->id());
+        $week = $resolved['week'];
 
-        $week = ReportWeek::where('property_id', $this->propertyId)
-            ->whereDate('start_date', $start->toDateString())
-            ->first();
-
-        if ($week && $week->isLocked()) {
+        if ($resolved['locked']) {
             $this->addError('startDate', 'That week is locked (approved/exported) and cannot be overwritten.');
 
             return;
         }
 
-        if (! $week) {
-            $week = ReportWeek::create([
-                'property_id' => $this->propertyId,
-                'start_date' => $start->toDateString(),
-                'end_date' => $end->toDateString(),
-                'year' => (int) $start->isoFormat('GGGG'),
-                'week_number' => (int) $start->isoFormat('W'),
-                'label' => $start->format('d M').' – '.$end->format('d M Y'),
-                'status' => ReportStatus::InProgress,
-                'owner_id' => auth()->id(),
-            ]);
-        }
-
-        $this->summary = (new WeeklyReportImporter())->applyToWeek($this->parsed, $week);
+        $this->summary = (new WeeklyReportImporter)->applyToWeek($this->parsed, $week);
 
         if ($this->importId) {
             Import::where('id', $this->importId)->update([
