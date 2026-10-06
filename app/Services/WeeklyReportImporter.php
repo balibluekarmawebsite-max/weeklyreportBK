@@ -21,7 +21,11 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Writes parsed weekly-report data into a report week's section tables.
- * Existing section rows for the week are replaced, so re-importing is safe.
+ *
+ * Each section can be applied on its own (the applyX methods replace only that
+ * section — used by the per-section importers), or the whole workbook can be
+ * applied at once via applyToWeek(). Both share the same insertX helpers, so a
+ * single-section import behaves identically to a full import for that section.
  */
 class WeeklyReportImporter
 {
@@ -34,41 +38,141 @@ class WeeklyReportImporter
     }
 
     /**
-     * Replace ONLY Section C (market segment production) for the week, leaving
-     * every other section untouched. Used by the VHP CSV import, which feeds a
-     * single section at a time. Rows carry a segment_group (category).
+     * Apply rows to a single section by its registry key (replaces only that
+     * section). Returns the number of rows written.
+     */
+    public function applySection(string $key, array $rows, ReportWeek $week): int
+    {
+        return match ($key) {
+            'monthly' => $this->applyMonthly($rows, $week),
+            'segment' => $this->applySegments($rows, $week),
+            'ratecode' => $this->applyRateCodes($rows, $week),
+            'channels' => $this->applyChannels($rows, $week),
+            'sales' => $this->applyActivities('sales', $rows, $week),
+            'ecommerce' => $this->applyActivities('ecommerce', $rows, $week),
+            'social' => $this->applySocial($rows, $week),
+            'trainings' => $this->applyTrainings($rows, $week),
+            'actionplan' => $this->applyActionPlans($rows, $week),
+            'owner_repeater' => $this->applyOwnerRepeater($rows, $week),
+            'owner_mix' => $this->applyOwnerMix($rows, $week),
+            default => throw new \InvalidArgumentException("Unknown section [{$key}]."),
+        };
+    }
+
+    // ---- Section-scoped applies (replace only that section) --------------
+
+    /** @param array<int, array{month?:int, rn_sold?:int|null}> $rows MonthlyStat attributes */
+    public function applyMonthly(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->monthlyStats()->delete();
+
+            return $this->insertMonthly($week, $rows);
+        });
+    }
+
+    /**
+     * Replace ONLY Section C (market segment production). Rows carry a
+     * segment_group (category).
      *
      * @param  array<int, array{segment_group?: ?string, label: string, rn_sold?: int|null, gross_revenue?: float|null}>  $segments
-     * @return int number of rows written
      */
     public function applySegments(array $segments, ReportWeek $week): int
     {
         return DB::transaction(function () use ($segments, $week) {
             $week->segmentProductions()->delete();
 
-            $order = 0;
-            foreach ($segments as $s) {
-                $label = trim((string) ($s['label'] ?? ''));
-                if ($label === '') {
-                    continue;
-                }
-                SegmentProduction::create([
-                    'report_week_id' => $week->id,
-                    'segment_group' => ($s['segment_group'] ?? null) ?: null,
-                    'label' => $label,
-                    'rn_sold' => $this->intOrNull($s['rn_sold'] ?? null),
-                    'gross_revenue' => $s['gross_revenue'] ?? null,
-                    'sort_order' => $order++,
-                ]);
-            }
-
-            return $order;
+            return $this->insertSegments($week, $segments);
         });
     }
 
-    /**
-     * Apply parsed data to the week. Returns a per-section count summary.
-     */
+    public function applyRateCodes(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->rateCodeProductions()->delete();
+
+            return $this->insertProduction($week, $rows, RateCodeProduction::class);
+        });
+    }
+
+    /** @param array<int, array{year:int, source:string, months:array<int,int>}> $rows */
+    public function applyChannels(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->channelMonthRns()->delete();
+
+            return $this->insertChannels($week, $rows);
+        });
+    }
+
+    public function applyActivities(string $department, array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($department, $rows, $week) {
+            $week->activities()->where('department', $department)->delete();
+            $titleKey = $department === 'ecommerce' ? 'task' : 'subject';
+
+            return $this->insertActivities($week, $department, $rows, $titleKey);
+        });
+    }
+
+    public function applySocial(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->socialMediaMetrics()->delete();
+
+            return $this->insertSocial($week, $rows);
+        });
+    }
+
+    public function applyTrainings(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->trainings()->delete();
+
+            return $this->insertTrainings($week, $rows);
+        });
+    }
+
+    public function applyActionPlans(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->actionPlans()->delete();
+
+            return $this->insertActionPlans($week, $rows);
+        });
+    }
+
+    /** @param array<string, ?string> $blocks  block key => body */
+    public function applyOverview(array $blocks, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($blocks, $week) {
+            $week->overviewBlocks()->delete();
+
+            return $this->insertOverview($week, $blocks);
+        });
+    }
+
+    public function applyOwnerRepeater(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->ownerRepeaterMonths()->delete();
+
+            return $this->insertOwnerRepeater($week, $rows);
+        });
+    }
+
+    public function applyOwnerMix(array $rows, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($rows, $week) {
+            $week->ownerChannelMix()->delete();
+
+            return $this->insertOwnerMix($week, $rows);
+        });
+    }
+
+    // ---- Whole-workbook apply -------------------------------------------
+
+    /** Apply parsed data to the week. Returns a per-section count summary. */
     public function applyToWeek(array $data, ReportWeek $week): array
     {
         return DB::transaction(function () use ($data, $week) {
@@ -85,125 +189,116 @@ class WeeklyReportImporter
             $week->trainings()->delete();
             $week->actionPlans()->delete();
 
-            $summary = [];
-
-            // Section B
-            $n = 0;
-            foreach ($data['sectionB'] ?? [] as $r) {
-                MonthlyStat::create(array_merge(['report_week_id' => $week->id], $r));
-                $n++;
-            }
-            $summary['B (monthly)'] = $n;
-
-            $summary['C (segments)'] = $this->applyProduction($week, $data['sectionC'] ?? [], SegmentProduction::class);
-            $summary['D (rate codes)'] = $this->applyProduction($week, $data['sectionD'] ?? [], RateCodeProduction::class);
-            $summary['E/F (channel rows)'] = $this->applyChannels($week, $data['channels'] ?? []);
-
-            // Owner repeater
-            $n = 0;
-            $order = 0;
-            foreach ($data['ownerRepeater'] ?? [] as $r) {
-                OwnerRepeaterMonth::create([
-                    'report_week_id' => $week->id,
-                    'label' => $r['label'],
-                    'room_nights' => $this->intOrNull($r['room_nights'] ?? null),
-                    'revenue' => $r['revenue'] ?? null,
-                    'sort_order' => $order++,
-                ]);
-                $n++;
-            }
-            $summary['Owner repeater'] = $n;
-
-            // Owner mix
-            $n = 0;
-            $order = 0;
-            foreach ($data['ownerMix'] ?? [] as $r) {
-                OwnerChannelMix::create([
-                    'report_week_id' => $week->id,
-                    'label' => $r['label'],
-                    'rn_sold' => $this->intOrNull($r['rn_sold'] ?? null),
-                    'gross_revenue' => $r['gross_revenue'] ?? null,
-                    'sort_order' => $order++,
-                ]);
-                $n++;
-            }
-            $summary['Owner mix'] = $n;
-
-            // ---- Phase 4 written sections ----
-            $headings = Overview::BLOCKS;
-            $ov = $data['overview'] ?? [];
-            $order = 0;
-            $filled = 0;
-            foreach ($headings as $key => $heading) {
-                $body = $ov[$key] ?? null;
-                OverviewBlock::create([
-                    'report_week_id' => $week->id,
-                    'key' => $key,
-                    'heading' => $heading,
-                    'body' => $body ?: null,
-                    'sort_order' => $order++,
-                ]);
-                if ($body) {
-                    $filled++;
-                }
-            }
-            $summary['A (overview blocks)'] = $filled;
-
-            $summary['G (sales)'] = $this->applyActivities($week, 'sales', $data['sales'] ?? [], 'subject');
-            $summary['G2 (e-commerce)'] = $this->applyActivities($week, 'ecommerce', $data['ecommerce'] ?? [], 'task');
-
-            $n = 0;
-            $order = 0;
-            foreach ($data['social'] ?? [] as $r) {
-                SocialMediaMetric::create([
-                    'report_week_id' => $week->id,
-                    'platform' => 'Instagram',
-                    'metric_key' => $r['metric'],
-                    'last_week' => $this->intOrNull($r['last_week'] ?? null),
-                    'this_week' => $this->intOrNull($r['this_week'] ?? null),
-                    'sort_order' => $order++,
-                ]);
-                $n++;
-            }
-            $summary['H (social metrics)'] = $n;
-
-            $n = 0;
-            $order = 0;
-            foreach ($data['trainings'] ?? [] as $r) {
-                Training::create([
-                    'report_week_id' => $week->id,
-                    'date_label' => $this->dateLabel($r['date'] ?? ''),
-                    'topic' => $r['topic'],
-                    'duration' => $r['duration'] ?: null,
-                    'trainer' => $r['trainer'] ?: null,
-                    'participants' => $r['participants'] ?: null,
-                    'sort_order' => $order++,
-                ]);
-                $n++;
-            }
-            $summary['I (trainings)'] = $n;
-
-            $n = 0;
-            $order = 0;
-            foreach ($data['actionPlan'] ?? [] as $r) {
-                ActionPlan::create([
-                    'report_week_id' => $week->id,
-                    'category' => $r['category'] ?: null,
-                    'plan' => $r['plan'],
-                    'start_label' => $this->dateLabel($r['start'] ?? ''),
-                    'deadline_label' => $this->dateLabel($r['deadline'] ?? ''),
-                    'remark' => $r['remark'] ?: null,
-                    'sort_order' => $order++,
-                ]);
-                $n++;
-            }
-            $summary['J (action plan)'] = $n;
-
-            return $summary;
+            return [
+                'B (monthly)' => $this->insertMonthly($week, $data['sectionB'] ?? []),
+                'C (segments)' => $this->insertProduction($week, $data['sectionC'] ?? [], SegmentProduction::class),
+                'D (rate codes)' => $this->insertProduction($week, $data['sectionD'] ?? [], RateCodeProduction::class),
+                'E/F (channel rows)' => $this->insertChannels($week, $data['channels'] ?? []),
+                'Owner repeater' => $this->insertOwnerRepeater($week, $data['ownerRepeater'] ?? []),
+                'Owner mix' => $this->insertOwnerMix($week, $data['ownerMix'] ?? []),
+                'A (overview blocks)' => $this->insertOverview($week, $data['overview'] ?? []),
+                'G (sales)' => $this->insertActivities($week, 'sales', $data['sales'] ?? [], 'subject'),
+                'G2 (e-commerce)' => $this->insertActivities($week, 'ecommerce', $data['ecommerce'] ?? [], 'task'),
+                'H (social metrics)' => $this->insertSocial($week, $data['social'] ?? []),
+                'I (trainings)' => $this->insertTrainings($week, $data['trainings'] ?? []),
+                'J (action plan)' => $this->insertActionPlans($week, $data['actionPlan'] ?? []),
+            ];
         });
     }
 
-    private function applyActivities(ReportWeek $week, string $department, array $rows, string $titleKey): int
+    // ---- Insert helpers (no delete; shared by both paths) ---------------
+
+    private function insertMonthly(ReportWeek $week, array $rows): int
+    {
+        $n = 0;
+        foreach ($rows as $r) {
+            if (! isset($r['month'])) {
+                continue;
+            }
+            MonthlyStat::create(array_merge(['report_week_id' => $week->id], $r));
+            $n++;
+        }
+
+        return $n;
+    }
+
+    private function insertSegments(ReportWeek $week, array $rows): int
+    {
+        $order = 0;
+        foreach ($rows as $s) {
+            $label = trim((string) ($s['label'] ?? ''));
+            if ($label === '') {
+                continue;
+            }
+            SegmentProduction::create([
+                'report_week_id' => $week->id,
+                'segment_group' => ($s['segment_group'] ?? null) ?: null,
+                'label' => $label,
+                'rn_sold' => $this->intOrNull($s['rn_sold'] ?? null),
+                'gross_revenue' => $s['gross_revenue'] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
+    private function insertProduction(ReportWeek $week, array $rows, string $model): int
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $label = trim((string) ($r['label'] ?? ''));
+            if ($label === '') {
+                continue;
+            }
+            $model::create([
+                'report_week_id' => $week->id,
+                'label' => $label,
+                'rn_sold' => $this->intOrNull($r['rn_sold'] ?? null),
+                'gross_revenue' => $r['gross_revenue'] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
+    private function insertChannels(ReportWeek $week, array $channels): int
+    {
+        // Merge duplicate (year, source) rows by summing months.
+        $merged = [];
+        foreach ($channels as $c) {
+            $key = ($c['year'] ?? '').'|'.($c['source'] ?? '');
+            if (! isset($merged[$key])) {
+                $merged[$key] = ['year' => $c['year'] ?? null, 'source' => $c['source'] ?? '', 'months' => array_fill(0, 12, 0)];
+            }
+            foreach (($c['months'] ?? []) as $i => $v) {
+                $merged[$key]['months'][$i] += (int) $v;
+            }
+        }
+
+        $months = ChannelMonthRn::MONTHS;
+        $order = 0;
+        foreach ($merged as $c) {
+            if (! $c['year'] || trim((string) $c['source']) === '') {
+                continue;
+            }
+            $attrs = [
+                'report_week_id' => $week->id,
+                'year' => (int) $c['year'],
+                'source_label' => $c['source'],
+                'sort_order' => $order++,
+            ];
+            foreach ($months as $i => $col) {
+                $attrs[$col] = (int) $c['months'][$i];
+            }
+            ChannelMonthRn::create($attrs);
+        }
+
+        return $order;
+    }
+
+    private function insertActivities(ReportWeek $week, string $department, array $rows, string $titleKey): int
     {
         $order = 0;
         foreach ($rows as $r) {
@@ -225,6 +320,132 @@ class WeeklyReportImporter
         return $order;
     }
 
+    private function insertSocial(ReportWeek $week, array $rows): int
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $metric = trim((string) ($r['metric'] ?? $r['metric_key'] ?? ''));
+            if ($metric === '') {
+                continue;
+            }
+            SocialMediaMetric::create([
+                'report_week_id' => $week->id,
+                'platform' => $r['platform'] ?? 'Instagram',
+                'metric_key' => $metric,
+                'last_week' => $this->intOrNull($r['last_week'] ?? null),
+                'this_week' => $this->intOrNull($r['this_week'] ?? null),
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
+    private function insertTrainings(ReportWeek $week, array $rows): int
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $topic = trim((string) ($r['topic'] ?? ''));
+            if ($topic === '') {
+                continue;
+            }
+            Training::create([
+                'report_week_id' => $week->id,
+                'date_label' => $this->dateLabel($r['date'] ?? ''),
+                'topic' => $topic,
+                'duration' => ($r['duration'] ?? null) ?: null,
+                'trainer' => ($r['trainer'] ?? null) ?: null,
+                'participants' => ($r['participants'] ?? null) ?: null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
+    private function insertActionPlans(ReportWeek $week, array $rows): int
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $plan = trim((string) ($r['plan'] ?? ''));
+            if ($plan === '') {
+                continue;
+            }
+            ActionPlan::create([
+                'report_week_id' => $week->id,
+                'category' => ($r['category'] ?? null) ?: null,
+                'plan' => $plan,
+                'start_label' => $this->dateLabel($r['start'] ?? ''),
+                'deadline_label' => $this->dateLabel($r['deadline'] ?? ''),
+                'remark' => ($r['remark'] ?? null) ?: null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
+    private function insertOverview(ReportWeek $week, array $blocks): int
+    {
+        $order = 0;
+        $filled = 0;
+        foreach (Overview::BLOCKS as $key => $heading) {
+            $body = $blocks[$key] ?? null;
+            OverviewBlock::create([
+                'report_week_id' => $week->id,
+                'key' => $key,
+                'heading' => $heading,
+                'body' => $body ?: null,
+                'sort_order' => $order++,
+            ]);
+            if ($body) {
+                $filled++;
+            }
+        }
+
+        return $filled;
+    }
+
+    private function insertOwnerRepeater(ReportWeek $week, array $rows): int
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $label = trim((string) ($r['label'] ?? ''));
+            if ($label === '') {
+                continue;
+            }
+            OwnerRepeaterMonth::create([
+                'report_week_id' => $week->id,
+                'label' => $label,
+                'room_nights' => $this->intOrNull($r['room_nights'] ?? null),
+                'revenue' => $r['revenue'] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
+    private function insertOwnerMix(ReportWeek $week, array $rows): int
+    {
+        $order = 0;
+        foreach ($rows as $r) {
+            $label = trim((string) ($r['label'] ?? ''));
+            if ($label === '') {
+                continue;
+            }
+            OwnerChannelMix::create([
+                'report_week_id' => $week->id,
+                'label' => $label,
+                'rn_sold' => $this->intOrNull($r['rn_sold'] ?? null),
+                'gross_revenue' => $r['gross_revenue'] ?? null,
+                'sort_order' => $order++,
+            ]);
+        }
+
+        return $order;
+    }
+
     private function dateLabel(string $label): string
     {
         try {
@@ -238,60 +459,8 @@ class WeeklyReportImporter
         return $label;
     }
 
-    private function applyProduction(ReportWeek $week, array $rows, string $model): int
-    {
-        $order = 0;
-        foreach ($rows as $r) {
-            $label = trim((string) ($r['label'] ?? ''));
-            if ($label === '') {
-                continue;
-            }
-            $model::create([
-                'report_week_id' => $week->id,
-                'label' => $label,
-                'rn_sold' => $this->intOrNull($r['rn_sold'] ?? null),
-                'gross_revenue' => $r['gross_revenue'] ?? null,
-                'sort_order' => $order++,
-            ]);
-        }
-
-        return $order;
-    }
-
-    private function applyChannels(ReportWeek $week, array $channels): int
-    {
-        // Merge duplicate (year, source) rows by summing months.
-        $merged = [];
-        foreach ($channels as $c) {
-            $key = $c['year'].'|'.$c['source'];
-            if (! isset($merged[$key])) {
-                $merged[$key] = ['year' => $c['year'], 'source' => $c['source'], 'months' => array_fill(0, 12, 0)];
-            }
-            foreach ($c['months'] as $i => $v) {
-                $merged[$key]['months'][$i] += (int) $v;
-            }
-        }
-
-        $months = ChannelMonthRn::MONTHS;
-        $order = 0;
-        foreach ($merged as $c) {
-            $attrs = [
-                'report_week_id' => $week->id,
-                'year' => $c['year'],
-                'source_label' => $c['source'],
-                'sort_order' => $order++,
-            ];
-            foreach ($months as $i => $col) {
-                $attrs[$col] = (int) $c['months'][$i];
-            }
-            ChannelMonthRn::create($attrs);
-        }
-
-        return $order;
-    }
-
     private function intOrNull($v): ?int
     {
-        return $v === null ? null : (int) $v;
+        return $v === null || $v === '' ? null : (int) $v;
     }
 }

@@ -30,6 +30,12 @@ class GroqClient
         return (string) Setting::get('ai', 'groq_model', config('services.groq.model'));
     }
 
+    /** The vision-capable model used to read data from uploaded images. */
+    public function visionModel(): string
+    {
+        return (string) config('services.groq.vision_model');
+    }
+
     /**
      * Send a chat completion and return the assistant's trimmed text content.
      *

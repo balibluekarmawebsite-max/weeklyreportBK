@@ -41,6 +41,9 @@ return [
     'groq' => [
         'key' => env('GROQ_API_KEY'),
         'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+        // A vision-capable model, used only to read data from uploaded images
+        // (screenshots). Same API key.
+        'vision_model' => env('GROQ_VISION_MODEL', 'meta-llama/llama-4-scout-17b-16e-instruct'),
         'base_url' => env('GROQ_BASE_URL', 'https://api.groq.com/openai/v1'),
         'timeout' => (int) env('GROQ_TIMEOUT', 45),
     ],
