@@ -35,6 +35,7 @@
 
                 <nav class="space-y-1">
                     <x-nav.item :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="home">Dashboard</x-nav.item>
+                    <x-nav.item :href="route('trends.index')" :active="request()->routeIs('trends.*')" icon="chart">Trends</x-nav.item>
                     <x-nav.item :href="route('reports.index')" :active="request()->routeIs('reports.*')" icon="doc">Weekly Reports</x-nav.item>
                     <x-nav.item :href="route('imports.index')" :active="request()->routeIs('imports.*')" icon="upload">Data Import</x-nav.item>
                     <x-nav.item :href="route('departments.index')" :active="request()->routeIs('departments.*')" icon="users">Department Inputs</x-nav.item>

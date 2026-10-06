@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ReportWeekController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TrendController;
 use App\Livewire\Actions\Logout;
 use App\Support\Workspace;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('trends', [TrendController::class, 'index'])->name('trends.index');
 
     // Switch the active property (top-bar switcher).
     Route::post('switch-property', function (Request $request) {

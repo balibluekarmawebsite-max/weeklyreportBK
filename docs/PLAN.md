@@ -89,7 +89,7 @@ Roles via a `roles`/`user_roles` table and Laravel policies/gates (or the `spati
 6. Exports: Excel, Word, PDF using the shared template; compare against the sample file.
 7. Groq AI drafting and rewriting. _(done — Section A drafting + rewrite/shorten/translate on notes, grounded on the figures; anomaly scan; Settings model selector. Needs `GROQ_API_KEY` in `.env`.)_
 8. Playwright VHP robot + secure import endpoint + scheduling. _(done — the HMAC-signed `POST /api/vhp-import` endpoint reuses the manual-import pipeline and records source=VHP; the `tools/vhp-robot` Node script signs + uploads (works today via `--file`) and scaffolds the VHP login/export, which needs VHP's real page selectors + one raw export sample to finish. Secret in `VHP_IMPORT_SECRET`.)_
-9. History, week-to-week comparison, multi-property rollout.
+9. History, week-to-week comparison, multi-property rollout. _(done — the **Trends** screen shows week-over-week KPI comparison (occupancy, ADR, room revenue, RN) with deltas, multi-week trend charts, a week-by-week table, and a cross-property portfolio snapshot (latest week per property). Headline figures use the same end-date-month rule as the dashboard.)_
 
 ## 9. Technical details (Bluehost VPS + Laravel)
 
