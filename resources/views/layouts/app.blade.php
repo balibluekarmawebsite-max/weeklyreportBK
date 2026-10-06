@@ -12,6 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=fraunces:400,500,600,700|inter:400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
     <body class="h-full font-sans">
         @php($property = \App\Support\Workspace::currentProperty())
@@ -117,5 +118,6 @@
                 </main>
             </div>
         </div>
+        @livewireScripts
     </body>
 </html>

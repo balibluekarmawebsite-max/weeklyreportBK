@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+    /* Keep Alpine-cloaked elements (modals, dropdowns) hidden until Alpine initialises. */
+    [x-cloak] {
+        display: none !important;
+    }
+
     body {
         @apply bg-sand-50 text-ink-800 antialiased;
     }
