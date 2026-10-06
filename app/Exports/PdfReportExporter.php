@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Services\ReportData;
 use Mpdf\Mpdf;
+use Mpdf\Output\Destination;
 
 /**
  * Renders the weekly report to a print-ready A4 PDF using an HTML (Blade)
@@ -12,9 +13,7 @@ use Mpdf\Mpdf;
  */
 class PdfReportExporter
 {
-    public function __construct(private ReportData $data)
-    {
-    }
+    public function __construct(private ReportData $data) {}
 
     public function save(): string
     {
@@ -32,7 +31,7 @@ class PdfReportExporter
 
         $p = $this->data->property();
         $period = $this->data->week->label ?? '';
-        $mpdf->SetHTMLHeader('<div style="border-bottom:1px solid #DBD0B8;padding-bottom:4px;font-size:8pt;color:#0F3D3E;">'
+        $mpdf->SetHTMLHeader('<div style="border-bottom:1px solid #DBD0B8;padding-bottom:4px;font-size:8pt;color:#15607F;">'
             .'<strong>'.e($p?->name ?? '').'</strong> &nbsp;·&nbsp; Weekly Report &nbsp;·&nbsp; '.e($period).'</div>');
         $mpdf->SetHTMLFooter('<div style="border-top:1px solid #DBD0B8;padding-top:4px;font-size:7.5pt;color:#888;">'
             .e($p?->export_footer ?? 'Confidential').' &nbsp; <span style="float:right;">Page {PAGENO} / {nbpg}</span></div>');
@@ -40,7 +39,7 @@ class PdfReportExporter
         $mpdf->WriteHTML($html);
 
         $path = tempnam(sys_get_temp_dir(), 'bkpdf_').'.pdf';
-        $mpdf->Output($path, \Mpdf\Output\Destination::FILE);
+        $mpdf->Output($path, Destination::FILE);
 
         return $path;
     }

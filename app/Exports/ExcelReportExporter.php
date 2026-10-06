@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
  */
 class ExcelReportExporter
 {
-    private const INK = '0F3D3E';
+    private const INK = '15607F';
 
     private const GOLD = 'C9A24B';
 

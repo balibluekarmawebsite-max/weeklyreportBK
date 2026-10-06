@@ -2,13 +2,20 @@
     <x-slot name="title">Dashboard</x-slot>
     <x-slot name="header">
         <div class="flex items-end justify-between">
-            <div>
-                <h1 class="font-serif text-2xl font-semibold text-ink-900">Dashboard</h1>
-                <p class="mt-1 text-sm text-ink-500">
-                    {{ $property?->name ?? 'No property configured' }}
-                    @if($week) · <span class="text-ink-600">{{ $week->label }}</span>@endif
-                    @if($currentMonthLabel) · figures for <span class="font-medium text-ink-700">{{ $currentMonthLabel }}</span>@endif
-                </p>
+            <div class="flex items-center gap-4">
+                @if($property)
+                    <div class="hidden rounded-xl border border-sand-200 bg-white px-3 py-2 sm:flex">
+                        <x-property-logo :property="$property" class="h-10" />
+                    </div>
+                @endif
+                <div>
+                    <h1 class="font-serif text-2xl font-semibold text-ink-900">Dashboard</h1>
+                    <p class="mt-1 text-sm text-ink-500">
+                        {{ $property?->name ?? 'No property configured' }}
+                        @if($week) · <span class="text-ink-600">{{ $week->label }}</span>@endif
+                        @if($currentMonthLabel) · figures for <span class="font-medium text-ink-700">{{ $currentMonthLabel }}</span>@endif
+                    </p>
+                </div>
             </div>
             @if($week)
                 <a href="{{ route('reports.show', $week) }}" wire:navigate class="hidden rounded-lg border border-sand-300 bg-white px-4 py-2 text-sm font-medium text-ink-700 hover:bg-sand-100 sm:inline-flex">Open this week</a>
@@ -103,7 +110,7 @@
         window.addEventListener('load', function () {
             if (!window.Chart) return;
             const D = JSON.parse(document.getElementById('chartData').textContent);
-            const INK = '#154748', GRID = '#E9E2D2', ACTUAL = '#2a78d6', BUDGET = '#eb6834', LY = '#1baf7a';
+            const INK = '#124E68', GRID = '#E9E2D2', ACTUAL = '#2a78d6', BUDGET = '#eb6834', LY = '#1baf7a';
             const gridCfg = { grid: { color: GRID, drawBorder: false }, ticks: { color: INK } };
 
             // Occupancy line

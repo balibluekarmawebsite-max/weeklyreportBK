@@ -22,10 +22,12 @@
             <aside
                 class="fixed inset-y-0 left-0 z-40 w-64 transform bg-ink-700 px-4 py-5 transition lg:static lg:translate-x-0"
                 :class="sidebar ? 'translate-x-0' : '-translate-x-full'">
-                <div class="flex items-center gap-3 px-2 pb-6">
-                    <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gold text-ink-900 font-serif font-bold">BK</div>
-                    <div class="leading-tight">
-                        <div class="font-serif text-base font-semibold text-white">Weekly Reports</div>
+                <div class="px-2 pb-6">
+                    <div class="flex items-center justify-center rounded-lg bg-white px-3 py-2.5">
+                        <x-property-logo :property="$property" class="h-11" />
+                    </div>
+                    <div class="mt-2.5 text-center leading-tight">
+                        <div class="font-serif text-sm font-semibold text-white">Weekly Reports</div>
                         <div class="text-xs text-ink-200">{{ $property?->code ?? 'BKDS' }}</div>
                     </div>
                 </div>

@@ -7,26 +7,26 @@
     $pct = fn($f) => $f === null ? '–' : number_format($f * 100, 1).'%';
 @endphp
 <style>
-    body { font-family: dejavusans, sans-serif; color: #0A2C2D; font-size: 9pt; }
-    h1.cover { font-size: 30pt; color: #0F3D3E; margin: 0; }
-    h2 { font-size: 14pt; color: #0F3D3E; border-bottom: 2px solid #C9A24B; padding-bottom: 3px; margin: 0 0 8px; }
-    h3 { font-size: 10.5pt; color: #0F3D3E; margin: 10px 0 3px; }
+    body { font-family: dejavusans, sans-serif; color: #0A2B3A; font-size: 9pt; }
+    h1.cover { font-size: 30pt; color: #15607F; margin: 0; }
+    h2 { font-size: 14pt; color: #15607F; border-bottom: 2px solid #C9A24B; padding-bottom: 3px; margin: 0 0 8px; }
+    h3 { font-size: 10.5pt; color: #15607F; margin: 10px 0 3px; }
     table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-    th { background: #0F3D3E; color: #fff; font-size: 8pt; padding: 4px 5px; text-align: right; }
+    th { background: #15607F; color: #fff; font-size: 8pt; padding: 4px 5px; text-align: right; }
     th.l, td.l { text-align: left; }
     td { padding: 3px 5px; font-size: 8.5pt; text-align: right; border-bottom: 0.4px solid #E9E2D2; }
     tr:nth-child(even) td { background: #FAF8F3; }
-    tr.total td { font-weight: bold; border-top: 1px solid #0F3D3E; background: #F4F0E7; }
+    tr.total td { font-weight: bold; border-top: 1px solid #15607F; background: #F4F0E7; }
     .muted { color: #888; }
     .note { font-size: 8pt; color: #444; white-space: pre-wrap; }
-    .cat { font-weight: bold; color: #154748; background:#F4F0E7; }
+    .cat { font-weight: bold; color: #206E8F; background:#F4F0E7; }
 </style>
 
 {{-- COVER --}}
 <div style="text-align:center; padding-top:180px;">
     <div style="color:#C9A24B; font-weight:bold; letter-spacing:3px; font-size:11pt;">WEEKLY REPORT</div>
     <h1 class="cover" style="margin-top:12px;">{{ $p?->name }}</h1>
-    <div style="margin-top:14px; font-size:13pt; color:#154748;">Sales &amp; Marketing</div>
+    <div style="margin-top:14px; font-size:13pt; color:#206E8F;">Sales &amp; Marketing</div>
     <div style="margin-top:6px; font-size:12pt;">{{ $d->week->label }}</div>
     <div style="margin-top:4px;" class="muted">Status: {{ $d->week->status->label() }}</div>
 </div>

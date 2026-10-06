@@ -26,19 +26,19 @@ export default {
                     200: '#E9E2D2',
                     300: '#DBD0B8',
                 },
-                // Deep teal / ink — primary brand + text.
+                // Blue Karma petrol-blue — primary brand + text. (#15607F)
                 ink: {
-                    DEFAULT: '#0F3D3E',
-                    50: '#EAF1F1',
-                    100: '#CFE0E0',
-                    200: '#9CBFC0',
-                    300: '#6A9D9E',
-                    400: '#3C7A7B',
-                    500: '#1E5859',
-                    600: '#154748',
-                    700: '#0F3D3E',
-                    800: '#0A2C2D',
-                    900: '#061E1F',
+                    DEFAULT: '#15607F',
+                    50: '#ECF3F7',
+                    100: '#D4E4EC',
+                    200: '#A6C8D7',
+                    300: '#6FA7BF',
+                    400: '#3F89A6',
+                    500: '#206E8F',
+                    600: '#15607F',
+                    700: '#124E68',
+                    800: '#0E3C50',
+                    900: '#0A2B3A',
                 },
                 // Warm gold accent (single accent colour).
                 gold: {

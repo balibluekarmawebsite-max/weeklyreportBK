@@ -4,18 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Enums\ReportStatus;
 use App\Models\ActivityLog;
-use App\Models\Property;
 use App\Models\ReportWeek;
+use App\Support\Workspace;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReportWeekController extends Controller
 {
     public function index(): View
     {
-        $property = \App\Support\Workspace::currentProperty();
+        $property = Workspace::currentProperty();
 
         $weeks = ReportWeek::query()
             ->when($property, fn ($q) => $q->where('property_id', $property->id))
@@ -91,5 +92,23 @@ class ReportWeekController extends Controller
             'counts' => $counts,
             'section' => $section,
         ]);
+    }
+
+    /** Permanently delete a report week and all its section data. Admin only. */
+    public function destroy(Request $request, ReportWeek $reportWeek): RedirectResponse
+    {
+        Gate::authorize('manage-settings');
+
+        // The typed confirmation must match the week label exactly.
+        $request->validate(['confirm' => ['required', 'string']]);
+        if (trim($request->string('confirm')) !== trim((string) $reportWeek->label)) {
+            return back()->withErrors(['confirm' => 'The confirmation text did not match the week label.']);
+        }
+
+        $label = $reportWeek->label;
+        ActivityLog::record('deleted', $reportWeek, 'Deleted report week '.$label.' ('.($reportWeek->property?->code ?? '').')');
+        $reportWeek->delete(); // section rows cascade via foreign keys
+
+        return redirect()->route('reports.index')->with('status', 'Deleted “'.$label.'” and all its data.');
     }
 }

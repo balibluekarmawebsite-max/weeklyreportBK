@@ -11,6 +11,7 @@
             @endunless
         </div>
         @if($saved)<div class="mx-5 mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700" x-data x-init="setTimeout(() => $el.remove(), 2500)">Saved.</div>@endif
+        @if($aiError)<div class="mx-5 mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{{ $aiError }}</div>@endif
 
         <table class="w-full text-sm">
             <thead>
@@ -27,7 +28,17 @@
                 @foreach($rows as $i => $row)
                     <tr>
                         <td class="px-4 py-1.5 w-32"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.date_label"></td>
-                        <td class="px-4 py-1.5"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.topic"></td>
+                        <td class="px-4 py-1.5">
+                            <input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.topic">
+                            @if($aiReady && ! $readonly)
+                                <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs" wire:loading.class="opacity-50" wire:target="aiRewrite({{ $i }}, 'rewrite'),aiRewrite({{ $i }}, 'translate_en'),aiRewrite({{ $i }}, 'translate_id')">
+                                    <span class="text-gold-600">✨</span>
+                                    <button wire:click="aiRewrite({{ $i }}, 'rewrite')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'rewrite')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60">Rewrite</button>
+                                    <button wire:click="aiRewrite({{ $i }}, 'translate_en')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'translate_en')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60" title="Translate to English">→ EN</button>
+                                    <button wire:click="aiRewrite({{ $i }}, 'translate_id')" wire:loading.attr="disabled" wire:target="aiRewrite({{ $i }}, 'translate_id')" class="rounded px-1.5 py-0.5 text-ink-600 hover:bg-sand-100 disabled:opacity-60" title="Translate to Indonesian">→ ID</button>
+                                </div>
+                            @endif
+                        </td>
                         <td class="px-4 py-1.5 w-24"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.duration"></td>
                         <td class="px-4 py-1.5 w-32"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.trainer"></td>
                         <td class="px-4 py-1.5"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.participants"></td>

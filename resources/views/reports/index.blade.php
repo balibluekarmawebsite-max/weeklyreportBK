@@ -26,6 +26,10 @@
         </div>
     </x-slot>
 
+    <div x-data="{ delId:null, delLabel:'', delAction:'', typed:'' }">
+    @if(session('status'))
+        <div class="mb-4 rounded-lg bg-emerald-50 px-4 py-2 text-sm text-emerald-700" x-data x-init="setTimeout(() => $el.remove(), 5000)">{{ session('status') }}</div>
+    @endif
     <div class="card overflow-hidden">
         @if($weeks->isEmpty())
             <div class="px-6 py-12 text-center">
@@ -52,8 +56,12 @@
                             <td class="px-6 py-3 text-ink-600">{{ $week->owner?->name ?? '–' }}</td>
                             <td class="px-6 py-3"><x-status-badge :status="$week->status" /></td>
                             <td class="px-6 py-3 text-ink-500">{{ $week->updated_at?->diffForHumans() }}</td>
-                            <td class="px-6 py-3 text-right">
+                            <td class="px-6 py-3 text-right whitespace-nowrap">
                                 <a href="{{ route('reports.show', $week) }}" wire:navigate class="font-medium text-ink-600 hover:text-ink-800">Open →</a>
+                                @can('manage-settings')
+                                    <button type="button" class="ml-4 text-ink-300 hover:text-red-500"
+                                        @click="delId={{ $week->id }}; delLabel=@js($week->label ?? $week->start_date->format('d M Y')); delAction='{{ url('reports') }}/{{ $week->id }}'; typed=''">Delete</button>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
@@ -64,5 +72,28 @@
 
     <div class="mt-4">
         {{ $weeks->links() }}
+    </div>
+
+    @can('manage-settings')
+        {{-- Delete confirmation modal (type the week label to confirm) --}}
+        <div x-show="delId !== null" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-ink-900/40 p-4" @keydown.escape.window="delId=null">
+            <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl" @click.outside="delId=null">
+                <h3 class="font-serif text-lg font-semibold text-ink-900">Delete this week?</h3>
+                <p class="mt-2 text-sm text-ink-600">This permanently deletes <span class="font-medium text-ink-800" x-text="delLabel"></span> and <strong>all of its section data</strong>. This cannot be undone.</p>
+                <form method="POST" x-bind:action="delAction" class="mt-4">
+                    @csrf
+                    @method('DELETE')
+                    <label class="block text-xs text-ink-500">Type the week label to confirm:</label>
+                    <input name="confirm" x-model="typed" :placeholder="delLabel" autocomplete="off"
+                        class="mt-1 w-full rounded border-sand-300 text-sm focus:border-red-400 focus:ring-red-400">
+                    <div class="mt-5 flex justify-end gap-2">
+                        <button type="button" @click="delId=null" class="rounded-lg px-4 py-2 text-sm text-ink-600 hover:bg-sand-100">Cancel</button>
+                        <button type="submit" :disabled="typed.trim() !== delLabel.trim()"
+                            class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40">Delete permanently</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endcan
     </div>
 </x-app-layout>

@@ -57,6 +57,9 @@
                 <button wire:click="close" class="text-sm text-ink-500 hover:text-ink-700">← All sections</button>
             </div>
             <p class="mt-1 text-xs text-ink-500">{{ $section['hint'] }}</p>
+            @if(in_array($active, ['sales', 'ecommerce', 'trainings', 'actionplan']) && $week)
+                <p class="mt-1 text-xs text-ink-400">Tip: you can also type these in directly (with <span class="text-gold-600">✨</span> AI rephrase) in the <a href="{{ route('reports.show', $week) }}" class="text-ink-600 underline">Report Editor</a>.</p>
+            @endif
 
             @if($errorMessage)<div class="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{{ $errorMessage }}</div>@endif
 

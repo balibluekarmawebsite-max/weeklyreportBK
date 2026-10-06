@@ -20,7 +20,7 @@ use PhpOffice\PhpWord\Style\Language;
  */
 class WordReportExporter
 {
-    private const INK = '0F3D3E';
+    private const INK = '15607F';
 
     private const GOLD = 'C9A24B';
 
@@ -54,7 +54,7 @@ class WordReportExporter
         // Cover
         $section->addText(strtoupper('Weekly Report'), ['bold' => true, 'size' => 11, 'color' => self::GOLD], ['alignment' => Jc::CENTER, 'spaceBefore' => 2400]);
         $section->addText($p?->name ?? '', ['bold' => true, 'size' => 26, 'color' => self::INK], ['alignment' => Jc::CENTER]);
-        $section->addText('Sales & Marketing', ['size' => 13, 'color' => '154748'], ['alignment' => Jc::CENTER, 'spaceBefore' => 200]);
+        $section->addText('Sales & Marketing', ['size' => 13, 'color' => '206E8F'], ['alignment' => Jc::CENTER, 'spaceBefore' => 200]);
         $section->addText($this->data->week->label ?? '', ['size' => 12], ['alignment' => Jc::CENTER]);
         $section->addText('Status: '.$this->data->week->status->label(), ['color' => '888888'], ['alignment' => Jc::CENTER]);
         $section->addPageBreak();
