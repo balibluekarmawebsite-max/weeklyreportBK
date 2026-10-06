@@ -2,14 +2,21 @@
 
 namespace App\Services;
 
+use App\Livewire\Sections\Overview;
+use App\Models\ActionPlan;
+use App\Models\Activity;
 use App\Models\ChannelMonthRn;
 use App\Models\MonthlyStat;
+use App\Models\OverviewBlock;
 use App\Models\OwnerChannelMix;
 use App\Models\OwnerRepeaterMonth;
 use App\Models\Property;
 use App\Models\RateCodeProduction;
 use App\Models\ReportWeek;
 use App\Models\SegmentProduction;
+use App\Models\SocialMediaMetric;
+use App\Models\Training;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -24,6 +31,39 @@ class WeeklyReportImporter
         $code = $meta['property_code'] ?? null;
 
         return $code ? Property::where('code', $code)->first() : null;
+    }
+
+    /**
+     * Replace ONLY Section C (market segment production) for the week, leaving
+     * every other section untouched. Used by the VHP CSV import, which feeds a
+     * single section at a time. Rows carry a segment_group (category).
+     *
+     * @param  array<int, array{segment_group?: ?string, label: string, rn_sold?: int|null, gross_revenue?: float|null}>  $segments
+     * @return int number of rows written
+     */
+    public function applySegments(array $segments, ReportWeek $week): int
+    {
+        return DB::transaction(function () use ($segments, $week) {
+            $week->segmentProductions()->delete();
+
+            $order = 0;
+            foreach ($segments as $s) {
+                $label = trim((string) ($s['label'] ?? ''));
+                if ($label === '') {
+                    continue;
+                }
+                SegmentProduction::create([
+                    'report_week_id' => $week->id,
+                    'segment_group' => ($s['segment_group'] ?? null) ?: null,
+                    'label' => $label,
+                    'rn_sold' => $this->intOrNull($s['rn_sold'] ?? null),
+                    'gross_revenue' => $s['gross_revenue'] ?? null,
+                    'sort_order' => $order++,
+                ]);
+            }
+
+            return $order;
+        });
     }
 
     /**
@@ -90,13 +130,13 @@ class WeeklyReportImporter
             $summary['Owner mix'] = $n;
 
             // ---- Phase 4 written sections ----
-            $headings = \App\Livewire\Sections\Overview::BLOCKS;
+            $headings = Overview::BLOCKS;
             $ov = $data['overview'] ?? [];
             $order = 0;
             $filled = 0;
             foreach ($headings as $key => $heading) {
                 $body = $ov[$key] ?? null;
-                \App\Models\OverviewBlock::create([
+                OverviewBlock::create([
                     'report_week_id' => $week->id,
                     'key' => $key,
                     'heading' => $heading,
@@ -115,7 +155,7 @@ class WeeklyReportImporter
             $n = 0;
             $order = 0;
             foreach ($data['social'] ?? [] as $r) {
-                \App\Models\SocialMediaMetric::create([
+                SocialMediaMetric::create([
                     'report_week_id' => $week->id,
                     'platform' => 'Instagram',
                     'metric_key' => $r['metric'],
@@ -130,7 +170,7 @@ class WeeklyReportImporter
             $n = 0;
             $order = 0;
             foreach ($data['trainings'] ?? [] as $r) {
-                \App\Models\Training::create([
+                Training::create([
                     'report_week_id' => $week->id,
                     'date_label' => $this->dateLabel($r['date'] ?? ''),
                     'topic' => $r['topic'],
@@ -146,7 +186,7 @@ class WeeklyReportImporter
             $n = 0;
             $order = 0;
             foreach ($data['actionPlan'] ?? [] as $r) {
-                \App\Models\ActionPlan::create([
+                ActionPlan::create([
                     'report_week_id' => $week->id,
                     'category' => $r['category'] ?: null,
                     'plan' => $r['plan'],
@@ -172,7 +212,7 @@ class WeeklyReportImporter
             if (trim((string) $title) === '' && trim((string) $notes) === '') {
                 continue;
             }
-            \App\Models\Activity::create([
+            Activity::create([
                 'report_week_id' => $week->id,
                 'department' => $department,
                 'date_label' => $this->dateLabel($r['date'] ?? ''),
@@ -189,7 +229,7 @@ class WeeklyReportImporter
     {
         try {
             if (preg_match('/^\d{4}-\d{2}-\d{2}/', $label)) {
-                return \Carbon\Carbon::parse($label)->format('d M Y');
+                return Carbon::parse($label)->format('d M Y');
             }
         } catch (\Throwable) {
             // keep original

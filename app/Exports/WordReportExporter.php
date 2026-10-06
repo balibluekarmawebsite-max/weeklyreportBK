@@ -2,13 +2,17 @@
 
 namespace App\Exports;
 
+use App\Livewire\Sections\SocialMedia;
+use App\Models\ChannelMonthRn;
 use App\Services\ReportData;
 use App\Support\Format;
 use App\Support\ReportCalculator;
-use App\Models\ChannelMonthRn;
+use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\SimpleType\Jc;
+use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\Shared\Converter;
+use PhpOffice\PhpWord\SimpleType\Jc;
+use PhpOffice\PhpWord\Style\Language;
 
 /**
  * Builds the weekly report as an editable .docx (A4) with heading styles so the
@@ -17,7 +21,9 @@ use PhpOffice\PhpWord\Shared\Converter;
 class WordReportExporter
 {
     private const INK = '0F3D3E';
+
     private const GOLD = 'C9A24B';
+
     private const SAND = 'F4F0E7';
 
     private PhpWord $word;
@@ -27,10 +33,10 @@ class WordReportExporter
         // PHPWord does NOT escape XML special characters (& < >) in text by default,
         // so any "&" in the data (e.g. "Sales & Marketing") produced an invalid
         // document.xml that Word refused to open. Enable output escaping globally.
-        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+        Settings::setOutputEscapingEnabled(true);
 
-        $this->word = new PhpWord();
-        $this->word->getSettings()->setThemeFontLang(new \PhpOffice\PhpWord\Style\Language(\PhpOffice\PhpWord\Style\Language::EN_GB));
+        $this->word = new PhpWord;
+        $this->word->getSettings()->setThemeFontLang(new Language(Language::EN_GB));
         $this->word->addTitleStyle(1, ['bold' => true, 'size' => 15, 'color' => self::INK], ['spaceBefore' => 240, 'spaceAfter' => 120]);
         $this->word->addTitleStyle(2, ['bold' => true, 'size' => 12, 'color' => self::INK], ['spaceBefore' => 160, 'spaceAfter' => 80]);
         $this->word->setDefaultFontName('Calibri');
@@ -66,7 +72,7 @@ class WordReportExporter
 
         // C & D
         $section->addTitle('C · Weekly Production by Market Segment', 1);
-        $this->productionTable($section, $this->data->segments(), $this->data->segmentTotals(), 'Source / Segment');
+        $this->segmentTable($section);
         $section->addTitle('D · Rate Code / Promotion', 1);
         $this->productionTable($section, $this->data->rateCodes(), $this->data->rateCodeTotals(), 'Promotion');
 
@@ -97,7 +103,7 @@ class WordReportExporter
         $this->ownerTables($section);
 
         $path = tempnam(sys_get_temp_dir(), 'bkword_').'.docx';
-        \PhpOffice\PhpWord\IOFactory::createWriter($this->word, 'Word2007')->save($path);
+        IOFactory::createWriter($this->word, 'Word2007')->save($path);
 
         return $path;
     }
@@ -162,6 +168,53 @@ class WordReportExporter
         $this->cell($r, Format::idr($tot['rev_actual']), $w, 'right', true, self::SAND);
         $this->cell($r, Format::idr($tot['rev_budget']), $w, 'right', true, self::SAND);
         $this->cell($r, Format::idr($tot['rev_ly']), $w, 'right', true, self::SAND);
+    }
+
+    /** Section C — grouped by category with per-group subtotals when available. */
+    private function segmentTable($section): void
+    {
+        if (! $this->data->segmentsAreGrouped()) {
+            $this->productionTable($section, $this->data->segments(), $this->data->segmentTotals(), 'Source / Segment');
+
+            return;
+        }
+
+        $tot = $this->data->segmentTotals();
+        $t = $this->newTable($section);
+        $h = $t->addRow();
+        $this->hcell($h, 'Source / Segment', 3500, 'left');
+        foreach (['RN Sold', 'Gross Revenue', 'ARR', '%'] as $l) {
+            $this->hcell($h, $l, 1600);
+        }
+
+        foreach ($this->data->segmentGroups() as $group => $g) {
+            $r = $t->addRow();
+            $this->cell($r, (string) $group, 3500, 'left', true, self::SAND);
+            foreach (['', '', '', ''] as $blank) {
+                $this->cell($r, '', 1600, 'right', true, self::SAND);
+            }
+            foreach ($g['rows'] as $row) {
+                $rr = $t->addRow();
+                $this->cell($rr, '   '.$row->label, 3500, 'left');
+                $this->cell($rr, Format::number($row->rn_sold), 1600);
+                $this->cell($rr, Format::idr($row->gross_revenue), 1600);
+                $this->cell($rr, Format::idr($row->arr()), 1600);
+                $this->cell($rr, Format::percent(ReportCalculator::sharePercent($row->rn_sold, $tot['rn'])), 1600);
+            }
+            $rr = $t->addRow();
+            $this->cell($rr, '   '.$group.' subtotal', 3500, 'left');
+            $this->cell($rr, Format::number($g['rn']), 1600);
+            $this->cell($rr, Format::idr($g['revenue']), 1600);
+            $this->cell($rr, '', 1600);
+            $this->cell($rr, Format::percent(ReportCalculator::sharePercent($g['rn'], $tot['rn'])), 1600);
+        }
+
+        $r = $t->addRow();
+        $this->cell($r, 'Total', 3500, 'left', true, self::SAND);
+        $this->cell($r, Format::number($tot['rn']), 1600, 'right', true, self::SAND);
+        $this->cell($r, Format::idr($tot['revenue']), 1600, 'right', true, self::SAND);
+        $this->cell($r, Format::idr($tot['arr']), 1600, 'right', true, self::SAND);
+        $this->cell($r, '100%', 1600, 'right', true, self::SAND);
     }
 
     private function productionTable($section, $rows, array $tot, string $lh): void
@@ -241,7 +294,7 @@ class WordReportExporter
 
     private function socialTable($section): void
     {
-        $labels = \App\Livewire\Sections\SocialMedia::METRICS;
+        $labels = SocialMedia::METRICS;
         $t = $this->newTable($section);
         $h = $t->addRow();
         $this->hcell($h, 'Metric', 3000, 'left');

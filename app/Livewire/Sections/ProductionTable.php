@@ -32,6 +32,7 @@ class ProductionTable extends Component
         foreach ($this->query()->get() as $r) {
             $this->rows[] = [
                 'id' => $r->id,
+                'group' => $this->kind === 'segment' ? ($r->segment_group ?? '') : '',
                 'label' => $r->label,
                 'rn_sold' => $r->rn_sold,
                 'gross_revenue' => $r->gross_revenue,
@@ -44,7 +45,7 @@ class ProductionTable extends Component
 
     public function addRow(): void
     {
-        $this->rows[] = ['id' => null, 'label' => '', 'rn_sold' => null, 'gross_revenue' => null];
+        $this->rows[] = ['id' => null, 'group' => '', 'label' => '', 'rn_sold' => null, 'gross_revenue' => null];
     }
 
     public function removeRow(int $index): void
@@ -67,14 +68,18 @@ class ProductionTable extends Component
             if (trim((string) $row['label']) === '') {
                 continue;
             }
+            $attrs = [
+                'label' => trim($row['label']),
+                'rn_sold' => $row['rn_sold'] === '' ? null : $row['rn_sold'],
+                'gross_revenue' => $row['gross_revenue'] === '' ? null : $row['gross_revenue'],
+                'sort_order' => $order++,
+            ];
+            if ($this->kind === 'segment') {
+                $attrs['segment_group'] = trim((string) ($row['group'] ?? '')) ?: null;
+            }
             $model = $class::updateOrCreate(
                 ['id' => $row['id'], 'report_week_id' => $this->week->id],
-                [
-                    'label' => trim($row['label']),
-                    'rn_sold' => $row['rn_sold'] === '' ? null : $row['rn_sold'],
-                    'gross_revenue' => $row['gross_revenue'] === '' ? null : $row['gross_revenue'],
-                    'sort_order' => $order++,
-                ],
+                $attrs,
             );
             $keepIds[] = $model->id;
         }

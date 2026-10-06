@@ -71,25 +71,59 @@
     </tbody>
 </table>
 
-{{-- C & D --}}
-@foreach([['C · Weekly Production by Market Segment', $d->segments(), $d->segmentTotals(), 'Source / Segment'], ['D · Rate Code / Promotion', $d->rateCodes(), $d->rateCodeTotals(), 'Promotion']] as [$title,$rows,$tot,$lh])
-    <h2 style="margin-top:14px;">{{ $title }}</h2>
-    <table>
-        <thead><tr><th class="l">{{ $lh }}</th><th>RN Sold</th><th>Gross Revenue</th><th>ARR</th><th>%</th></tr></thead>
-        <tbody>
-        @foreach($rows as $r)
+{{-- C — Weekly Production by Market Segment (grouped by category when available) --}}
+@php $segTot = $d->segmentTotals(); @endphp
+<h2 style="margin-top:14px;">C · Weekly Production by Market Segment</h2>
+<table>
+    <thead><tr><th class="l">Source / Segment</th><th>RN Sold</th><th>Gross Revenue</th><th>ARR</th><th>%</th></tr></thead>
+    <tbody>
+    @if($d->segmentsAreGrouped())
+        @foreach($d->segmentGroups() as $group => $g)
+            <tr class="total"><td class="l" colspan="5">{{ $group }}</td></tr>
+            @foreach($g['rows'] as $r)
+                <tr>
+                    <td class="l" style="padding-left:14px;">{{ $r->label }}</td>
+                    <td>{{ Format::number($r->rn_sold) }}</td>
+                    <td>{{ Format::idr($r->gross_revenue) }}</td>
+                    <td>{{ Format::idr($r->arr()) }}</td>
+                    <td>{{ Format::percent(ReportCalculator::sharePercent($r->rn_sold, $segTot['rn'])) }}</td>
+                </tr>
+            @endforeach
+            <tr><td class="l" style="padding-left:14px;font-style:italic;">{{ $group }} subtotal</td><td>{{ Format::number($g['rn']) }}</td><td>{{ Format::idr($g['revenue']) }}</td><td></td><td>{{ Format::percent(ReportCalculator::sharePercent($g['rn'], $segTot['rn'])) }}</td></tr>
+        @endforeach
+    @else
+        @foreach($d->segments() as $r)
             <tr>
                 <td class="l">{{ $r->label }}</td>
                 <td>{{ Format::number($r->rn_sold) }}</td>
                 <td>{{ Format::idr($r->gross_revenue) }}</td>
                 <td>{{ Format::idr($r->arr()) }}</td>
-                <td>{{ Format::percent(ReportCalculator::sharePercent($r->rn_sold, $tot['rn'])) }}</td>
+                <td>{{ Format::percent(ReportCalculator::sharePercent($r->rn_sold, $segTot['rn'])) }}</td>
             </tr>
         @endforeach
-            <tr class="total"><td class="l">Total</td><td>{{ Format::number($tot['rn']) }}</td><td>{{ Format::idr($tot['revenue']) }}</td><td>{{ Format::idr($tot['arr']) }}</td><td>100%</td></tr>
-        </tbody>
-    </table>
-@endforeach
+    @endif
+        <tr class="total"><td class="l">Total</td><td>{{ Format::number($segTot['rn']) }}</td><td>{{ Format::idr($segTot['revenue']) }}</td><td>{{ Format::idr($segTot['arr']) }}</td><td>100%</td></tr>
+    </tbody>
+</table>
+
+{{-- D — Rate Code / Promotion --}}
+@php $rcTot = $d->rateCodeTotals(); @endphp
+<h2 style="margin-top:14px;">D · Rate Code / Promotion</h2>
+<table>
+    <thead><tr><th class="l">Promotion</th><th>RN Sold</th><th>Gross Revenue</th><th>ARR</th><th>%</th></tr></thead>
+    <tbody>
+    @foreach($d->rateCodes() as $r)
+        <tr>
+            <td class="l">{{ $r->label }}</td>
+            <td>{{ Format::number($r->rn_sold) }}</td>
+            <td>{{ Format::idr($r->gross_revenue) }}</td>
+            <td>{{ Format::idr($r->arr()) }}</td>
+            <td>{{ Format::percent(ReportCalculator::sharePercent($r->rn_sold, $rcTot['rn'])) }}</td>
+        </tr>
+    @endforeach
+        <tr class="total"><td class="l">Total</td><td>{{ Format::number($rcTot['rn']) }}</td><td>{{ Format::idr($rcTot['revenue']) }}</td><td>{{ Format::idr($rcTot['arr']) }}</td><td>100%</td></tr>
+    </tbody>
+</table>
 <pagebreak />
 
 {{-- E/F Channels (current year) --}}

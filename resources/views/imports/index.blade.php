@@ -6,4 +6,6 @@
     </x-slot>
 
     @livewire('data-import')
+
+    @livewire('vhp-segment-import')
 </x-app-layout>

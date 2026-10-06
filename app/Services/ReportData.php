@@ -75,6 +75,29 @@ class ReportData
         return ReportCalculator::productionTotals($this->segments());
     }
 
+    /** True when Section C rows carry a category (segment_group) and should be grouped. */
+    public function segmentsAreGrouped(): bool
+    {
+        return $this->segments()->contains(fn ($s) => filled($s->segment_group));
+    }
+
+    /**
+     * Section C grouped by category with per-group subtotals, in the stored
+     * sort order (categories appear in first-seen order).
+     *
+     * @return Collection<string, array{rows: Collection, rn: int, revenue: float}>
+     */
+    public function segmentGroups(): Collection
+    {
+        return $this->segments()
+            ->groupBy(fn ($s) => $s->segment_group ?: 'Other')
+            ->map(fn ($rows) => [
+                'rows' => $rows->values(),
+                'rn' => (int) $rows->sum('rn_sold'),
+                'revenue' => (float) $rows->sum('gross_revenue'),
+            ]);
+    }
+
     public function rateCodes(): Collection
     {
         return $this->week->rateCodeProductions->sortBy('sort_order')->values();

@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Livewire\Sections\SocialMedia;
+use App\Models\ChannelMonthRn;
 use App\Services\ReportData;
 use App\Support\ReportCalculator;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -20,16 +22,20 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class ExcelReportExporter
 {
     private const INK = '0F3D3E';
+
     private const GOLD = 'C9A24B';
+
     private const SAND = 'F4F0E7';
+
     private const MONEY = '#,##0;[Red]-#,##0';
+
     private const PCT = '0.0%';
 
     private Spreadsheet $book;
 
     public function __construct(private ReportData $data)
     {
-        $this->book = new Spreadsheet();
+        $this->book = new Spreadsheet;
         $this->book->removeSheetByIndex(0);
     }
 
@@ -39,7 +45,7 @@ class ExcelReportExporter
         $this->cover();
         $this->overview();
         $this->monthly();
-        $this->production('C · Weekly Production by Market Segment', 'C-Segment', $this->data->segments(), $this->data->segmentTotals(), 'Source / Segment');
+        $this->segmentSheet();
         $this->production('D · Rate Code / Promotion', 'D-RateCode', $this->data->rateCodes(), $this->data->rateCodeTotals(), 'Promotion');
         $this->channels();
         $this->activitiesSheet();
@@ -103,7 +109,9 @@ class ExcelReportExporter
         $s->setCellValue('C3', 'Occupancy %');
         $s->setCellValue('F3', 'ARR (IDR)');
         $s->setCellValue('I3', 'Revenue (IDR)');
-        $s->mergeCells('C3:E3'); $s->mergeCells('F3:H3'); $s->mergeCells('I3:K3');
+        $s->mergeCells('C3:E3');
+        $s->mergeCells('F3:H3');
+        $s->mergeCells('I3:K3');
         foreach (['A', 'B', 'C', 'F', 'I'] as $c) {
             $this->fillHeader($s, "{$c}3");
         }
@@ -143,6 +151,55 @@ class ExcelReportExporter
         $s->getStyle("A{$row}:K{$row}")->getBorders()->getTop()->setBorderStyle(Border::BORDER_THIN);
         $this->autosize($s, range('A', 'K'));
         $s->freezePane('A5');
+    }
+
+    /** Section C — grouped by category with per-group subtotals when available. */
+    private function segmentSheet(): void
+    {
+        if (! $this->data->segmentsAreGrouped()) {
+            $this->production('C · Weekly Production by Market Segment', 'C-Segment', $this->data->segments(), $this->data->segmentTotals(), 'Source / Segment');
+
+            return;
+        }
+
+        $totals = $this->data->segmentTotals();
+        $s = $this->sheet('C-Segment');
+        $this->title($s, 'A1', 'C · Weekly Production by Market Segment');
+        foreach (['A' => 'Source / Segment', 'B' => 'RN Sold', 'C' => 'Gross Revenue', 'D' => 'ARR', 'E' => '%'] as $c => $label) {
+            $s->setCellValue("{$c}3", $label);
+            $this->fillHeader($s, "{$c}3");
+        }
+
+        $pct = fn ($part) => ReportCalculator::sharePercent($part, $totals['rn']) !== null ? ReportCalculator::sharePercent($part, $totals['rn']) / 100 : null;
+        $row = 4;
+        foreach ($this->data->segmentGroups() as $group => $g) {
+            $s->setCellValue("A{$row}", (string) $group);
+            $s->getStyle("A{$row}:E{$row}")->getFont()->setBold(true);
+            $row++;
+            foreach ($g['rows'] as $r) {
+                $s->setCellValue("A{$row}", '   '.$r->label);
+                $this->num($s, "B{$row}", $r->rn_sold, '#,##0');
+                $this->num($s, "C{$row}", $r->gross_revenue, self::MONEY);
+                $this->num($s, "D{$row}", $r->arr(), self::MONEY);
+                $this->num($s, "E{$row}", $pct($r->rn_sold), self::PCT);
+                $row++;
+            }
+            $s->setCellValue("A{$row}", '   '.$group.' subtotal');
+            $this->num($s, "B{$row}", $g['rn'], '#,##0');
+            $this->num($s, "C{$row}", $g['revenue'], self::MONEY);
+            $this->num($s, "E{$row}", $pct($g['rn']), self::PCT);
+            $s->getStyle("A{$row}:E{$row}")->getFont()->setItalic(true);
+            $row++;
+        }
+
+        $s->setCellValue("A{$row}", 'Total');
+        $this->num($s, "B{$row}", $totals['rn'], '#,##0');
+        $this->num($s, "C{$row}", $totals['revenue'], self::MONEY);
+        $this->num($s, "D{$row}", $totals['arr'], self::MONEY);
+        $this->num($s, "E{$row}", 1, self::PCT);
+        $s->getStyle("A{$row}:E{$row}")->getFont()->setBold(true);
+        $s->getStyle("A{$row}:E{$row}")->getBorders()->getTop()->setBorderStyle(Border::BORDER_THIN);
+        $this->autosize($s, ['A', 'B', 'C', 'D', 'E']);
     }
 
     private function production(string $title, string $tab, $rows, array $totals, string $labelHeading): void
@@ -194,7 +251,7 @@ class ExcelReportExporter
             $grand = (int) $sources->sum(fn ($x) => $x->ytd());
             foreach ($sources as $src) {
                 $s->setCellValue("A{$row}", $src->source_label);
-                foreach (\App\Models\ChannelMonthRn::MONTHS as $i => $mkey) {
+                foreach (ChannelMonthRn::MONTHS as $i => $mkey) {
                     $this->num($s, "{$cols[$i]}{$row}", $src->{$mkey}, '#,##0');
                 }
                 $this->num($s, "O{$row}", $src->ytd(), '#,##0');
@@ -241,7 +298,7 @@ class ExcelReportExporter
             $s->setCellValue("{$c}3", $label);
             $this->fillHeader($s, "{$c}3");
         }
-        $labels = \App\Livewire\Sections\SocialMedia::METRICS;
+        $labels = SocialMedia::METRICS;
         $row = 4;
         foreach ($this->data->socialMetrics() as $m) {
             $s->setCellValue("A{$row}", $labels[$m->metric_key] ?? $m->metric_key);

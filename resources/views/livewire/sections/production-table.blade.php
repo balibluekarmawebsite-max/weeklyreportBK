@@ -23,6 +23,7 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-sand-200 text-left text-xs uppercase tracking-wide text-ink-400">
+                    @if($kind === 'segment')<th class="px-4 py-2 font-medium">Category</th>@endif
                     <th class="px-4 py-2 font-medium">{{ $this->labelHeading() }}</th>
                     <th class="px-4 py-2 font-medium text-right">RN Sold</th>
                     <th class="px-4 py-2 font-medium text-right">Gross Revenue</th>
@@ -34,6 +35,7 @@
             <tbody class="divide-y divide-sand-100">
                 @foreach($rows as $i => $row)
                     <tr>
+                        @if($kind === 'segment')<td class="px-4 py-1.5 w-40"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.group" placeholder="e.g. OTA"></td>@endif
                         <td class="px-4 py-1.5"><input {{ $readonly?'disabled':'' }} class="{{ $cls }}" wire:model.blur="rows.{{ $i }}.label" placeholder="e.g. Booking.com"></td>
                         <td class="px-4 py-1.5 w-28"><input type="number" {{ $readonly?'disabled':'' }} class="{{ $num }}" wire:model.blur="rows.{{ $i }}.rn_sold"></td>
                         <td class="px-4 py-1.5 w-40"><input type="number" {{ $readonly?'disabled':'' }} class="{{ $num }}" wire:model.blur="rows.{{ $i }}.gross_revenue"></td>
@@ -49,7 +51,7 @@
             </tbody>
             <tfoot>
                 <tr class="border-t-2 border-ink-200 font-semibold text-ink-800">
-                    <td class="px-4 py-2">Total</td>
+                    <td class="px-4 py-2" @if($kind === 'segment') colspan="2" @endif>Total</td>
                     <td class="px-4 py-2 text-right tabular-nums">{{ Format::number($this->totals['rn']) }}</td>
                     <td class="px-4 py-2 text-right tabular-nums">{{ Format::idr($this->totals['revenue']) }}</td>
                     <td class="px-4 py-2 text-right tabular-nums">{{ Format::idr($this->totals['arr']) }}</td>
