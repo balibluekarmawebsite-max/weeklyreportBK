@@ -9,6 +9,7 @@ use App\Models\RateCode;
 use App\Models\Role;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\Ai\GroqClient;
 use App\Support\Workspace;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -18,23 +19,32 @@ use Illuminate\Validation\Rule;
 
 class SettingsController extends Controller
 {
-    /** Curated Groq models offered in the UI (a custom .env value still works). */
+    /**
+     * Fallback Groq models shown when the live /models list can't be fetched
+     * (no key, or the API is unreachable). A custom .env value still works.
+     */
     public const GROQ_MODELS = [
-        'llama-3.3-70b-versatile' => 'Llama 3.3 70B — versatile (recommended)',
-        'llama-3.1-8b-instant' => 'Llama 3.1 8B — instant (fast, low cost)',
-        'openai/gpt-oss-120b' => 'GPT-OSS 120B',
-        'openai/gpt-oss-20b' => 'GPT-OSS 20B',
+        'openai/gpt-oss-120b' => 'OpenAI GPT-OSS 120B (recommended)',
+        'openai/gpt-oss-20b' => 'OpenAI GPT-OSS 20B (faster)',
+        'qwen/qwen3.8-27b' => 'Qwen 3 27B',
+        'allam-2-7b' => 'Allam 2 7B',
     ];
 
-    public function index(): View
+    public function index(GroqClient $groq): View
     {
         $groqModel = (string) Setting::get('ai', 'groq_model', config('services.groq.model'));
 
-        // Always include the active model in the list, even if it was set via
-        // .env and isn't one of the curated options.
-        $models = self::GROQ_MODELS;
+        // Ask the key which models it can actually use, so the dropdown never
+        // offers a retired model ID. Fall back to the curated list on failure.
+        $live = $groq->listModels();
+        $modelsAreLive = $live !== [];
+        $models = $modelsAreLive
+            ? collect($live)->mapWithKeys(fn ($id) => [$id => $id])->all()
+            : self::GROQ_MODELS;
+
+        // Always include the active model, even if it isn't in the fetched list.
         if (! array_key_exists($groqModel, $models)) {
-            $models = [$groqModel => $groqModel.' (from .env)'] + $models;
+            $models = [$groqModel => $groqModel.($modelsAreLive ? ' (current — not in list)' : ' (from .env)')] + $models;
         }
 
         return view('settings.index', [
@@ -46,19 +56,22 @@ class SettingsController extends Controller
             'roles' => Role::all(),
             'groqModel' => $groqModel,
             'groqModels' => $models,
-            'groqKeyConfigured' => filled(config('services.groq.key')),
+            'modelsAreLive' => $modelsAreLive,
+            'groqKeyConfigured' => $groq->configured(),
         ]);
     }
 
-    public function updateAi(Request $request): RedirectResponse
+    public function updateAi(Request $request, GroqClient $groq): RedirectResponse
     {
         // Changing the global AI model is an admin-only action (also enforced by
         // the route's can:manage-settings middleware).
         Gate::authorize('manage-settings');
 
-        // Only a known model, or the current .env default, may be stored — never
-        // an arbitrary free-form string.
+        // Allow any model the key can actually access (live list), plus the
+        // curated fallbacks and the current .env default — never an arbitrary
+        // free-form string.
         $allowed = array_values(array_unique(array_merge(
+            $groq->listModels(),
             array_keys(self::GROQ_MODELS),
             [(string) config('services.groq.model')],
         )));

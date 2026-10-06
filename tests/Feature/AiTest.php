@@ -69,7 +69,7 @@ class AiTest extends TestCase
         Http::assertSent(function ($request) {
             return str_contains($request->url(), '/chat/completions')
                 && $request->hasHeader('Authorization', 'Bearer test-key')
-                && $request['model'] === 'llama-3.3-70b-versatile'
+                && $request['model'] === 'openai/gpt-oss-120b'
                 && is_array($request['messages']);
         });
     }
@@ -166,16 +166,16 @@ class AiTest extends TestCase
         $this->get(route('settings.index'))->assertOk()->assertSee('AI drafting (Groq)');
 
         // setUp acts as the seeded admin.
-        $this->put(route('settings.ai.update'), ['groq_model' => 'llama-3.1-8b-instant'])
+        $this->put(route('settings.ai.update'), ['groq_model' => 'openai/gpt-oss-20b'])
             ->assertRedirect();
 
-        $this->assertSame('llama-3.1-8b-instant', Setting::get('ai', 'groq_model'));
+        $this->assertSame('openai/gpt-oss-20b', Setting::get('ai', 'groq_model'));
     }
 
     public function test_non_admin_cannot_change_ai_model(): void
     {
         $this->actingAs(User::factory()->create()) // a fresh user has no admin role
-            ->put(route('settings.ai.update'), ['groq_model' => 'llama-3.1-8b-instant'])
+            ->put(route('settings.ai.update'), ['groq_model' => 'openai/gpt-oss-20b'])
             ->assertForbidden();
 
         $this->assertNull(Setting::get('ai', 'groq_model'));

@@ -4,6 +4,7 @@ namespace App\Services\Ai;
 
 use App\Models\Setting;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 /**
@@ -34,6 +35,54 @@ class GroqClient
     public function visionModel(): string
     {
         return (string) config('services.groq.vision_model');
+    }
+
+    /**
+     * The chat model IDs this API key can actually access, newest first.
+     *
+     * Asks Groq's /models endpoint so the UI only ever offers real, available
+     * models (model IDs change as Groq rotates its line-up). Returns an empty
+     * array when the key is missing or the call fails — callers fall back to a
+     * static list. Cached briefly to avoid a request on every settings view.
+     *
+     * @return array<int, string>
+     */
+    public function listModels(): array
+    {
+        if (! $this->configured()) {
+            return [];
+        }
+
+        $base = rtrim((string) config('services.groq.base_url'), '/');
+
+        return Cache::remember('groq.models', now()->addMinutes(10), function () use ($base) {
+            try {
+                $response = Http::baseUrl($base)
+                    ->withToken((string) config('services.groq.key'))
+                    ->timeout((int) config('services.groq.timeout', 45))
+                    ->acceptJson()
+                    ->get('/models');
+            } catch (ConnectionException) {
+                return [];
+            }
+
+            if ($response->failed()) {
+                return [];
+            }
+
+            $ids = collect($response->json('data', []))
+                ->filter(fn ($m) => is_array($m) && ! empty($m['id']))
+                // Vision / audio / guard models aren't useful for text drafting.
+                ->reject(fn ($m) => str_contains((string) $m['id'], 'whisper')
+                    || str_contains((string) $m['id'], 'guard')
+                    || str_contains((string) $m['id'], 'tts'))
+                ->sortByDesc(fn ($m) => $m['created'] ?? 0)
+                ->pluck('id')
+                ->values()
+                ->all();
+
+            return array_map('strval', $ids);
+        });
     }
 
     /**

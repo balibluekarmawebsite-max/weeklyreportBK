@@ -40,7 +40,7 @@ return [
     // See docs/PLAN.md section 5.
     'groq' => [
         'key' => env('GROQ_API_KEY'),
-        'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+        'model' => env('GROQ_MODEL', 'openai/gpt-oss-120b'),
         // A vision-capable model, used only to read data from uploaded images
         // (screenshots). Same API key.
         'vision_model' => env('GROQ_VISION_MODEL', 'meta-llama/llama-4-scout-17b-16e-instruct'),
